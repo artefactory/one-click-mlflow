@@ -1,6 +1,6 @@
 variable "server_name" {
     type = string
-    description = "Name of your cserver"
+    description = "Name of your server"
 }
 variable "location" {
     type = string
