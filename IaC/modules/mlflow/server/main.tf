@@ -1,9 +1,15 @@
+resource "google_service_account" "service_account_cloud_run" {
+  account_id   = format("cloud-run-%s", server_name)
+  display_name = "Cloud run service account used"
+}
+
 resource "google_cloud_run_service" "default" {
   name     = var.server_name
   location = var.location
 
   template {
     spec {
+      service_account_name = google_service_account.service_account_cloud_run.email
       containers {
         image = var.docker_image_name
         dynamic "env" {
@@ -33,6 +39,18 @@ resource "google_cloud_run_service" "default" {
     latest_revision = true
   }
   autogenerate_revision_name = true
+}
+
+resource "google_project_iam_member" "cloudsql" {
+  project = google_cloud_run_service.default.project
+  role    = "roles/cloudsql.client"
+  member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
+}
+
+resource "google_project_iam_member" "secret" {
+  project = google_cloud_run_service.default.project
+  role    = "roles/secretmanager.secretAccessor"
+  member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
 }
 
 data "google_iam_policy" "noauth" {
