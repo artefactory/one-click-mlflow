@@ -8,8 +8,8 @@ module "artifacts" {
 
 module "db_secret" {
     source = "./secret_manager"
-    secret_id = db_password_name
-    secret_value = db_password_value
+    secret_id = var.db_password_name
+    secret_value = var.db_password_value
 }
 
 module "database" {
