@@ -53,6 +53,12 @@ resource "google_project_iam_member" "secret" {
   member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
 }
 
+resource "google_project_iam_member" "gcs" {
+  project = google_cloud_run_service.default.project
+  role    = "roles/storage.objectAdmin"
+  member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
+}
+
 data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
