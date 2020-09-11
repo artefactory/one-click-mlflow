@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DB_PASSWORD=$(gcloud beta secrets versions access --project=${GCP_PROJECT} --secret=${DB_PASSWORD_NAME} latest)
 BACKEND_URI=mysql+pymysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_PRIVATE_IP}/${DB_NAME}
 
