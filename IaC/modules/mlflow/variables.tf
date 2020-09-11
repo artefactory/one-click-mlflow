@@ -8,7 +8,7 @@ variable "artifacts_bucket_location" {
     default = "EUROPE-WEST1"
 }
 variable "artifacts_number_of_version" {
-    description = "Number of file version keeped in your artifacts bucket"
+    description = "Number of file version kept in your artifacts bucket"
     type = number
     default = 1
 }
@@ -37,7 +37,7 @@ variable "db_instance_prefix" {
     default = "mlflow"
 }
 variable "db_version" {
-    description = "Databse instance version in GCP"
+    description = "Database instance version in GCP"
     type = string
     default = "MYSQL_5_7"
 }
