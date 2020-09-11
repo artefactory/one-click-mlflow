@@ -33,4 +33,12 @@ module "server" {
     docker_image_name = var.server_docker_image
     env_variables = var.server_env_variables
     sql_instance_name = module.database.instance_connection_name
+    db_private_ip = module.database.private_ip
+    project_id = var.project_id
+    db_password_name = var.db_password_name
+    db_username = var.db_username
+    db_name = var.db_name
+    gcs_backend = module.artifacts.url
+    vpc_connector = var.vpc_connector
+    module_depends_on = var.module_depends_on
 }

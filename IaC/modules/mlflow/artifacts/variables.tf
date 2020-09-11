@@ -22,3 +22,7 @@ variable "storage_class" {
     type        = string
     default     ="STANDARD"
 }
+variable "module_depends_on" {
+  type    = any
+  default = null
+}

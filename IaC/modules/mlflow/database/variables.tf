@@ -6,7 +6,7 @@ variable "instance_prefix" {
 variable "database_version" {
     type = string
     description = "Version of the database instance you use"
-    default = "MYSQL_5_6"
+    default = "MYSQL_5_7"
 }
 variable "region" {
     type = string
@@ -14,7 +14,7 @@ variable "region" {
     default = "europe-west1"
 }
 variable "private_vpc_connection" {
-    type = string
+    type = any
     description = "Private connection used to connect your instance with"
 }
 variable "size" {
@@ -43,4 +43,8 @@ variable "username" {
 variable "password" {
     type = string
     description = "Password to connect to database instance" 
+}
+variable "module_depends_on" {
+  type    = any
+  default = null
 }

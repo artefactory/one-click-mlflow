@@ -39,7 +39,7 @@ variable "db_instance_prefix" {
 variable "db_version" {
     description = "Databse instance version in GCP"
     type = string
-    default = "MYSQL_5_6"
+    default = "MYSQL_5_7"
 }
 variable "db_region" {
     description = "Database region"
@@ -87,4 +87,16 @@ variable "server_env_variables" {
     description = "Env variables used inside your container"
     type = map
     default = {}
+}
+variable "project_id" {
+    description = "GCP project"
+    type = string
+}
+variable "vpc_connector" {
+    type = string
+    description = "Vpc connector of your private network"
+}
+variable "module_depends_on" {
+  type    = any
+  default = null
 }
