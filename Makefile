@@ -1,5 +1,5 @@
-pre-check: 
-	-gsutil -m mb -l EU -p $(PROJECT_ID) gs://$(BACKEND_TERRAFORM)
+pre-requesites: 
+	@cd Iac/prerequesites && terraform init && terraform apply
 
 init-terraform:
 	@cd Iac && terraform init -backend-config="bucket=$(BACKEND_TERRAFORM)"
