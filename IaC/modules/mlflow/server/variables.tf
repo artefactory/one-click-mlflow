@@ -61,3 +61,8 @@ variable "module_depends_on" {
   type    = any
   default = null
 }
+variable "service_account_mlflow_users" {
+    type = string
+    default = "mlflow-users"
+    description = "Service account created to connect to mlflow"
+}

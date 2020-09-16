@@ -23,6 +23,6 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 resource "google_vpc_access_connector" "vpc_con" {
   name          = "vpc-con"
   region        = var.region
-  ip_cidr_range = "10.8.0.0/28"
+  ip_cidr_range = lookup(var.vpc_connector_regions, var.region)
   network       = google_compute_network.vpc.name
 }
