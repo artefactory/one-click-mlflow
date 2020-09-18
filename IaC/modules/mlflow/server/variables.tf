@@ -15,10 +15,6 @@ variable "env_variables" {
     type = map
     description = "Env variable to be used in your container"
 }
-variable "sql_instance_name" {
-    type = string
-    description = "Sql instance name your server needs access to"
-}
 variable "project_id" {
     description = "GCP project"
     type = string
@@ -39,16 +35,6 @@ variable "gcs_backend" {
     description = "Gcs bucket used for artifacts"
     type = string
 }
-variable "cpu_limit" {
-    type = string
-    description = "Maximum cpu"
-    default = "1000m"
-}
-variable "memory_limit" {
-    type = string
-    description = "Memory limit of your container"
-    default = "1024Mi"
-}
 variable "vpc_connector" {
     type = string
     description = "Vpc connector of your private network"
@@ -60,9 +46,4 @@ variable "db_private_ip" {
 variable "module_depends_on" {
   type    = any
   default = null
-}
-variable "service_account_mlflow_users" {
-    type = string
-    default = "mlflow-users"
-    description = "Service account created to connect to mlflow"
 }
