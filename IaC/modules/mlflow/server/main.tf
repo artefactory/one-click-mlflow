@@ -35,6 +35,12 @@ resource "google_project_iam_member" "gcs" {
   member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
 }
 
+# resource "google_project_iam_member" "gcs_app" {
+#   project = data.google_project.project.project_id
+#   role    = "roles/storage.objectAdmin"
+#   member = format("serviceAccount:service-%s@appspot.google.com.iam.gserviceaccount.com", data.google_project.project.number)
+# }
+
 resource "google_project_iam_member" "gae_api" {
   project = data.google_project.project.project_id
   role    = "roles/compute.networkUser"
@@ -43,7 +49,7 @@ resource "google_project_iam_member" "gae_api" {
 
 resource "google_app_engine_flexible_app_version" "myapp_v1" {
   version_id = "v1"
-  service    = var.server_name
+  service    = "default"
   runtime    = "custom"
 
   deployment {
@@ -66,5 +72,13 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
     name = var.vpc_connector
   }
 
+  automatic_scaling {
+    cool_down_period = "120s"
+    cpu_utilization {
+      target_utilization = 0.5
+    }
+  }
+
   noop_on_destroy = true
+  depends_on = [google_project_iam_member.gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
 }

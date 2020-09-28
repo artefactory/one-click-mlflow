@@ -13,8 +13,8 @@ module "services" {
   source = "./../modules/services"
   project_id = var.project_id
   services = ["container.googleapis.com", "servicenetworking.googleapis.com", 
-              "stackdriver.googleapis.com", "vpcaccess.googleapis.com", "appengineflex.googleapis.com",
-              "sqladmin.googleapis.com", "secretmanager.googleapis.com"]
+              "stackdriver.googleapis.com", "vpcaccess.googleapis.com", "appengine.googleapis.com",
+              "appengineflex.googleapis.com", "sqladmin.googleapis.com", "secretmanager.googleapis.com"]
 }
 
 module "bucket_backend" {

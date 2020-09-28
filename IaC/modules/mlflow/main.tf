@@ -32,7 +32,6 @@ module "server" {
     location = var.server_location
     docker_image_name = var.server_docker_image
     env_variables = var.server_env_variables
-    sql_instance_name = module.database.instance_connection_name
     db_private_ip = module.database.private_ip
     project_id = var.project_id
     db_password_name = var.db_password_name
