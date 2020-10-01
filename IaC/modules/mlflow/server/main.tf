@@ -15,6 +15,11 @@ data "google_project" "project" {
 
 resource "google_app_engine_application" "app" {
   location_id = var.location
+  iap {
+    enabled = true
+    oauth2_client_id = google_iap_client.project_client.client_id
+    oauth2_client_secret = google_iap_client.project_client.secret
+  }
 }
 
 resource "google_project_iam_member" "cloudsql" {
@@ -35,21 +40,15 @@ resource "google_project_iam_member" "gcs" {
   member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
 }
 
-# resource "google_project_iam_member" "gcs_app" {
-#   project = data.google_project.project.project_id
-#   role    = "roles/storage.objectAdmin"
-#   member = format("serviceAccount:service-%s@appspot.google.com.iam.gserviceaccount.com", data.google_project.project.number)
-# }
-
 resource "google_project_iam_member" "gae_api" {
   project = data.google_project.project.project_id
   role    = "roles/compute.networkUser"
-  member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
+  member  = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
 }
 
 resource "google_app_engine_flexible_app_version" "myapp_v1" {
+  service    = "mlflow-server"
   version_id = "v1"
-  service    = "default"
   runtime    = "custom"
 
   deployment {
@@ -68,17 +67,45 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
 
   env_variables = local.env_variables
 
-  vpc_access_connector {
-    name = var.vpc_connector
-  }
-
   automatic_scaling {
     cool_down_period = "120s"
+    max_total_instances =  1
+    min_total_instances = 1
     cpu_utilization {
       target_utilization = 0.5
     }
   }
+  resources {
+    cpu = 1
+    memory_gb = 2
+  }
+
+  beta_settings = {
+      cloud_sql_instances = format("%s=tcp:3306", var.db_instance)
+  }
 
   noop_on_destroy = true
   depends_on = [google_project_iam_member.gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
+}
+
+resource "google_project_service" "project_service" {
+  project = data.google_project.project.project_id
+  service = "iap.googleapis.com"
+}
+
+resource "google_iap_brand" "project_brand" {
+  support_email     = var.consent_screen_support_email
+  application_title = "mlflow"
+  project           = data.google_project.project.number
+}
+resource "google_iap_client" "project_client" {
+  display_name = "mlflow"
+  brand        =  google_iap_brand.project_brand.name
+}
+resource "google_iap_app_engine_service_iam_binding" "member" {
+  project = data.google_project.project.name
+  app_id = data.google_project.project.name
+  service = google_app_engine_flexible_app_version.myapp_v1.service
+  role = "roles/iap.httpsResourceAccessor"
+  members = var.web_app_users
 }

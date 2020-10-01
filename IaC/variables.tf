@@ -15,8 +15,11 @@ variable "mlflow_docker_image" {
     description = "Docker image used in container registry"
     type = string
 }
-variable "network_name" {
-    description = "Network used"
+variable "consent_screen_support_email" {
     type = string
-    default = "default-private"
+    description = "Person or group to contact in case of problem (address shown in the OAuth consent screen)"
+}
+variable "web_app_users" {
+    type = list(string)
+    description = "List of people who can acess the mlflow web app. e.g. [user:jane@example.com, group:people@example.com]"
 }

@@ -17,9 +17,7 @@ module "database" {
     instance_prefix = var.db_instance_prefix
     database_version = var.db_version
     region = var.db_region
-    private_vpc_connection = var.private_vpc_connection
     size = var.db_size
-    network_link = var.network_link
     availability_type = var.db_availability_type
     database_name = var.db_name
     username = var.db_username
@@ -37,7 +35,9 @@ module "server" {
     db_password_name = var.db_password_name
     db_username = var.db_username
     db_name = var.db_name
+    db_instance = module.database.instance_connection_name
     gcs_backend = module.artifacts.url
-    vpc_connector = var.vpc_connector
     module_depends_on = var.module_depends_on
+    consent_screen_support_email = var.consent_screen_support_email
+    web_app_users = var.web_app_users
 }

@@ -7,13 +7,11 @@ resource "google_sql_database_instance" "this_instance" {
   database_version = var.database_version
   region           = var.region
 
-  depends_on = [var.private_vpc_connection]
-
   settings {
     tier = var.size
     ip_configuration {
       ipv4_enabled    = false
-      private_network = var.network_link
+      private_network = "https://www.googleapis.com/compute/v1/projects/one-click-mlflow/global/networks/default"
     }
     backup_configuration {
       enabled = true
