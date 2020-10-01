@@ -11,13 +11,12 @@ resource "google_sql_database_instance" "this_instance" {
     tier = var.size
     ip_configuration {
       ipv4_enabled    = false
-      private_network = "https://www.googleapis.com/compute/v1/projects/one-click-mlflow/global/networks/default"
+      private_network = var.network_self_link
     }
     backup_configuration {
       enabled = true
     }
     availability_type = var.availability_type
-
   }
 }
 

@@ -40,3 +40,7 @@ variable "module_depends_on" {
   type    = any
   default = null
 }
+
+variable "network_self_link" {
+  type = string
+}

@@ -108,4 +108,5 @@ resource "google_iap_app_engine_service_iam_binding" "member" {
   service = google_app_engine_flexible_app_version.myapp_v1.service
   role = "roles/iap.httpsResourceAccessor"
   members = var.web_app_users
+  depends_on = [google_app_engine_flexible_app_version.myapp_v1]
 }

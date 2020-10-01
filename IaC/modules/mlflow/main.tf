@@ -22,6 +22,7 @@ module "database" {
     database_name = var.db_name
     username = var.db_username
     password = module.db_secret.secret_value
+    network_self_link = var.network_self_link
 }
 
 module "server" {
