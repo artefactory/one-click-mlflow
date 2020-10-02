@@ -23,3 +23,7 @@ variable "web_app_users" {
     type = list(string)
     description = "List of people who can acess the mlflow web app. e.g. [user:jane@example.com, group:people@example.com]"
 }
+variable "network_name" {
+    type = string
+    description = "Name of the network to attach to. If empty, a new network will be created"
+}

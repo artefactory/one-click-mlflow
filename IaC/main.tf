@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
   }
-  required_version = "=0.13.2"
+  required_version = "~> 0.13.2"
   required_providers {
     google = "~> 3.13"
   }
@@ -21,6 +21,7 @@ resource "random_id" "artifacts_bucket_name_suffix" {
 
 module "network" {
   source = "./modules/network"
+  network_name = var.network_name
 }
 
 module "mlflow" {
@@ -31,4 +32,5 @@ module "mlflow" {
   project_id = var.project_id
   consent_screen_support_email = var.consent_screen_support_email
   web_app_users = var.web_app_users
+  network_self_link = module.network.network_self_link
 }
