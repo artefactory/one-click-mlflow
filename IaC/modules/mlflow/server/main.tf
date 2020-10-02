@@ -47,7 +47,7 @@ resource "google_project_iam_member" "gae_api" {
 }
 
 resource "google_app_engine_flexible_app_version" "myapp_v1" {
-  service    = "mlflow-server"
+  service    = var.service
   version_id = "v1"
   runtime    = "custom"
 
