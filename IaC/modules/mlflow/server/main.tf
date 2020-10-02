@@ -25,13 +25,13 @@ resource "google_app_engine_application" "app" {
 resource "google_project_iam_member" "cloudsql" {
   project = data.google_project.project.project_id
   role    = "roles/cloudsql.client"
-  member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "secret" {
   project = data.google_project.project.project_id
   role    = "roles/secretmanager.secretAccessor"
-  member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "gcs" {
@@ -43,7 +43,7 @@ resource "google_project_iam_member" "gcs" {
 resource "google_project_iam_member" "gae_api" {
   project = data.google_project.project.project_id
   role    = "roles/compute.networkUser"
-  member  = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
+  member  = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_app_engine_flexible_app_version" "myapp_v1" {
@@ -86,11 +86,6 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
 
   noop_on_destroy = true
   depends_on = [google_project_iam_member.gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
-}
-
-resource "google_project_service" "project_service" {
-  project = data.google_project.project.project_id
-  service = "iap.googleapis.com"
 }
 
 resource "google_iap_brand" "project_brand" {
