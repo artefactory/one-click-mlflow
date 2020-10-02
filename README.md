@@ -15,7 +15,7 @@ Fill out the `vars` file.
 |---|---| 
 |`TF_VAR_project_id`|Name of the GCP project|
 |`TF_VAR_backend_bucket`|Name of the terraform backend bucket. Should be unique. No `gs://` prefix|
-|`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized|
+|`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user|
 |`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'|
 |`TF_VAR_network_name`|The network the application and backend should attach to. If blank, a new network will be created.|
 
@@ -26,4 +26,3 @@ Run `make one-clic-mlflow` and follow the prompts.
 - `make docker`: builds and pushes the application image
 - `make apply`: (re)deploys the infrastructure
 - `make destroy`: destroys the infrastructure. **Will not delete the OAuth consent screen, and the app engine application**
-
