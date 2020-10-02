@@ -4,25 +4,23 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 ## How to use
 
 ### Pre-requesites
-- Create a GCP project
-- Init gcloud
-- Have docker installed locally
-- Export the name of your GCP project by running `EXPORT PROJECT_ID=YOUR_PROJECT`
-- Run `make pre-requesites`. You'll be asked to enter the bucket name used to store terraform state, and your project id
-- Deploy mlflow container by running `make docker`. This will build mlflow docker image locally and push it to container registry
+- A GCP project
+- Initialized gcloud SDK
+- Docker engine running
 
-### Deploy mlflow
-- Export the name of your GCP project by running `EXPORT PROJECT_ID=YOUR_PROJECT`
-- Export the name of your bucket used to store terraform state by running `EXPORT BACKEND_TERRAFORM=BUCKET_NAME`. It must be the same as the one you selected when installing the pre-requesites.
-- Deploy mlflow to GCP by running `make apply`. You'll be asked to enter the database password you want to use
+### Deploying
+Fill out the `vars` file.
 
 
-## Goals
+|Variable name|Description|
+|---|---| 
+|`TF_VAR_project_id`|Name of the GCP project|
+|`TF_VAR_backend_bucket`|Name of the terraform backend bucket. Should be unique. No `gs://` prefix|
+|`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized|
+|`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'|
+|`TF_VAR_network_name`|The network the application and backend should attach to. If blank, a new network will be created.|
 
-The project's deliverables are
-- MLflow tracking server on Cloud Run
-- Artifacts on GCS
-- Metrics backend on Cloud SQL (MySQL)
-- Terraformed infrastructure
-- A list of all the GCP APIs that need to be enabled
-- A list of all the necessary GCP permissions to run the deployment
+
+Run `make one-clic-mlflow` and follow the prompts.
+
+
