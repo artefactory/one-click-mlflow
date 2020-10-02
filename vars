@@ -1,0 +1,5 @@
+export TF_VAR_project_id=two-click-mlflow
+export TF_VAR_backend_bucket=tfstate-mlflow-atf-two
+export TF_VAR_consent_screen_support_email=alexis.vialaret@artefact.com
+export TF_VAR_web_app_users='["user:alexis.vialaret@artefact.com", "user:thomas.griseau@artefact.com"]'
+export TF_VAR_network_name=default
