@@ -1,7 +1,7 @@
 resource "google_compute_network" "private_network" {
   count = length(var.network_name) > 0 ? 0 : 1
   name = var.network_name_local
-  auto_create_subnetworks = false
+  auto_create_subnetworks = true
 }
 
 resource "google_compute_global_address" "private_ip_addresses" {
