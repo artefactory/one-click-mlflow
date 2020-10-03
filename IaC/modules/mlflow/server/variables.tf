@@ -58,3 +58,4 @@ variable "web_app_users" {
 variable "service" {
     default = "default"
 }
+variable "network_short_name" {}

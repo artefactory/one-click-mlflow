@@ -79,6 +79,9 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
     cpu = 1
     memory_gb = 2
   }
+  network {
+      name = var.network_short_name
+  }
 
   beta_settings = {
       cloud_sql_instances = format("%s=tcp:3306", var.db_instance)

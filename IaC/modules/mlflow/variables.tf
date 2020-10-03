@@ -99,3 +99,4 @@ variable "web_app_users" {
 variable "network_self_link" {
   type = string
 }
+variable "network_short_name" {}

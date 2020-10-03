@@ -41,4 +41,5 @@ module "server" {
     module_depends_on = var.module_depends_on
     consent_screen_support_email = var.consent_screen_support_email
     web_app_users = var.web_app_users
+    network_short_name = var.network_short_name
 }
