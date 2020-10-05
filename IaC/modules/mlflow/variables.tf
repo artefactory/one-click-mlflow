@@ -46,18 +46,10 @@ variable "db_region" {
     type = string
     default = "europe-west1"
 }
-variable "private_vpc_connection" {
-    description = "Vpc connection with the database"
-    type = any
-}
 variable "db_size" {
     description = "Database instance size"
     type = string
     default = "db-f1-micro"
-}
-variable "network_link" {
-    description = "Link to your network"
-    type = string
 }
 variable "db_availability_type" {
     description = "Availability of your database"
@@ -77,7 +69,7 @@ variable "mlflow_server" {
 variable "server_location" {
     description = "Location to deploy cloud run server"
     type = string
-    default = "europe-west1"
+    default = "europe-west"
 }
 variable "server_docker_image" {
     description = "Docker image name of your mlflow server"
@@ -92,11 +84,19 @@ variable "project_id" {
     description = "GCP project"
     type = string
 }
-variable "vpc_connector" {
-    type = string
-    description = "Vpc connector of your private network"
-}
 variable "module_depends_on" {
   type    = any
   default = null
 }
+variable "consent_screen_support_email" {
+    type = string
+    description = "Person or group to contact in case of problem"
+}
+variable "web_app_users" {
+    type = list(string)
+    description = "List of people who can acess the mlflow web app. e.g. [user:jane@example.com, group:people@example.com]"
+}
+variable "network_self_link" {
+  type = string
+}
+variable "network_short_name" {}

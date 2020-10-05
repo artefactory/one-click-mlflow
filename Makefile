@@ -1,28 +1,23 @@
-DOCKER_REPO := eu.gcr.io
-DOCKER_NAME := mlflow
-DOCKER_TAG := 0.1
-
-
 pre-requesites:
-	@cd Iac/prerequesites && terraform init && terraform apply -var="project_id=$(PROJECT_ID)"
+	source vars_base && cd Iac/prerequesites && terraform init && terraform apply
 
 build-docker:
-	@cd tracking_server && docker build -t $(DOCKER_REPO)/$(PROJECT_ID)/$(DOCKER_NAME):$(DOCKER_TAG) -f tracking.Dockerfile .
+	source vars_base && cd tracking_server && docker build -t $${TF_VAR_mlflow_docker_image} -f tracking.Dockerfile .
 
 push-docker:
-	@docker push $(DOCKER_REPO)/$(PROJECT_ID)/$(DOCKER_NAME):$(DOCKER_TAG)
+	source vars_base && docker push $${TF_VAR_mlflow_docker_image}
 
 init-terraform:
-	@cd Iac && terraform init -backend-config="bucket=$(BACKEND_TERRAFORM)"
+	source vars_base && cd Iac && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}"
 
 apply-terraform:
-	@cd Iac && terraform apply -var="project_id=$(PROJECT_ID)" -var="mlflow_docker_image=$(DOCKER_REPO)/$(PROJECT_ID)/$(DOCKER_NAME):$(DOCKER_TAG)"
+	source vars_base && cd Iac && terraform apply
 
 plan-terraform:
-	@cd Iac && terraform plan -var="project_id=$(PROJECT_ID)" -var="mlflow_docker_image=$(DOCKER_REPO)/$(PROJECT_ID)/$(DOCKER_NAME):$(DOCKER_TAG)"
+	source vars_base && cd Iac && terraform plan
 
 destroy-terraform:
-	@cd Iac && terraform destroy -var="project_id=$(PROJECT_ID)" -var="mlflow_docker_image=$(DOCKER_REPO)/$(PROJECT_ID)/$(DOCKER_NAME):$(DOCKER_TAG)"
+	source vars_base && cd Iac && terraform destroy
 
 apply: init-terraform apply-terraform
 
@@ -31,3 +26,9 @@ plan: init-terraform plan-terraform
 destroy: init-terraform destroy-terraform
 
 docker: build-docker push-docker
+
+init: pre-requesites
+
+deploy: docker apply
+
+one-click-mlflow : init deploy

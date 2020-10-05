@@ -7,19 +7,16 @@ resource "google_sql_database_instance" "this_instance" {
   database_version = var.database_version
   region           = var.region
 
-  depends_on = [var.private_vpc_connection]
-
   settings {
     tier = var.size
     ip_configuration {
       ipv4_enabled    = false
-      private_network = var.network_link
+      private_network = var.network_self_link
     }
     backup_configuration {
       enabled = true
     }
     availability_type = var.availability_type
-
   }
 }
 
