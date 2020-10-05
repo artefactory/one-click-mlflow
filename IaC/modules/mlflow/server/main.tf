@@ -108,3 +108,21 @@ resource "google_iap_app_engine_service_iam_binding" "member" {
   members = var.web_app_users
   depends_on = [google_app_engine_flexible_app_version.myapp_v1]
 }
+
+resource "google_service_account" "log_pusher" {
+  account_id   = "mlflow-log-pusher"
+  display_name = "mlflow log pusher"
+}
+
+resource "google_project_iam_member" "log_pusher_iap" {
+  depends_on = [google_iap_app_engine_service_iam_binding.member]
+  project = data.google_project.project.project_id
+  role    = "roles/iap.httpsResourceAccessor"
+  member = "serviceAccount:${google_service_account.log_pusher.email}"
+}
+
+resource "google_project_iam_member" "log_pusher_storage" {
+  project = data.google_project.project.project_id
+  role    = "roles/storage.objectCreator"
+  member = "serviceAccount:${google_service_account.log_pusher.email}"
+}
