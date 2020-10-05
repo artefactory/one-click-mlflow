@@ -4,32 +4,6 @@ resource "google_compute_network" "private_network" {
   auto_create_subnetworks = true
 }
 
-resource "google_compute_firewall" "allow-ssh" {
-  count = length(var.network_name) > 0 ? 0 : 1
-  name    = "${var.network_name_local}-allow-ssh"
-  network = google_compute_network.private_network[0].name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-}
-
-resource "google_compute_firewall" "allow-rdp" {
-  count = length(var.network_name) > 0 ? 0 : 1
-  name    = "${var.network_name_local}-allow-rdp"
-  network = google_compute_network.private_network[0].name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["3389"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-}
-
 resource "google_compute_firewall" "allow-internal" {
   count = length(var.network_name) > 0 ? 0 : 1
   name    = "${var.network_name_local}-allow-internal"
@@ -48,18 +22,6 @@ resource "google_compute_firewall" "allow-internal" {
   }
 
   source_ranges = ["10.128.0.0/9"]
-}
-
-resource "google_compute_firewall" "allow-ipcmp" {
-  count = length(var.network_name) > 0 ? 0 : 1
-  name    = "${var.network_name_local}-allow-ipcmp"
-  network = google_compute_network.private_network[0].name
-
-  allow {
-    protocol = "icmp"
-  }
-
-  source_ranges = ["0.0.0.0/0"]
 }
 
 resource "google_compute_global_address" "private_ip_addresses" {
