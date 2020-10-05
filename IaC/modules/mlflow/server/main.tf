@@ -10,85 +10,101 @@ locals {
     }, var.env_variables)
 }
 
+data "google_project" "project" {
+}
 
-resource "google_service_account" "service_account_cloud_run" {
-  account_id   = format("cloud-run-%s", var.server_name)
-  display_name = "Cloud run service account used"
+resource "google_app_engine_application" "app" {
+  location_id = var.location
+  iap {
+    enabled = true
+    oauth2_client_id = google_iap_client.project_client.client_id
+    oauth2_client_secret = google_iap_client.project_client.secret
+  }
 }
 
 resource "google_project_iam_member" "cloudsql" {
-  project = google_service_account.service_account_cloud_run.project
+  project = data.google_project.project.project_id
   role    = "roles/cloudsql.client"
-  member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "secret" {
-  project = google_service_account.service_account_cloud_run.project
+  project = data.google_project.project.project_id
   role    = "roles/secretmanager.secretAccessor"
-  member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "gcs" {
-  project = google_service_account.service_account_cloud_run.project
+  project = data.google_project.project.project_id
   role    = "roles/storage.objectAdmin"
-  member  = format("serviceAccount:%s", google_service_account.service_account_cloud_run.email)
+  member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
 }
 
+resource "google_project_iam_member" "gae_api" {
+  project = data.google_project.project.project_id
+  role    = "roles/compute.networkUser"
+  member  = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
+}
 
-resource "google_cloud_run_service" "default" {
-  name     = var.server_name
-  location = var.location
+resource "google_app_engine_flexible_app_version" "myapp_v1" {
+  service    = var.service
+  version_id = "v1"
+  runtime    = "custom"
 
-  template {
-    spec {
-      service_account_name = google_service_account.service_account_cloud_run.email
-      containers {
-        image = var.docker_image_name
-        dynamic "env" {
-            for_each = local.env_variables
-            content {
-            name = env.key
-            value = env.value
-            }
-        }
-        resources {
-            limits = {
-                cpu = var.cpu_limit
-                memory = var.memory_limit
-            }
-        }
-      }
-    }
-    metadata {
-      annotations = {
-        "run.googleapis.com/cloudsql-instances" = var.sql_instance_name
-        "run.googleapis.com/vpc-access-connector" = var.vpc_connector
-      }
+  deployment {
+    container {
+      image = var.docker_image_name
     }
   }
 
-  traffic {
-    percent         = 100
-    latest_revision = true
+  liveness_check {
+    path = "/"
   }
-  autogenerate_revision_name = true
-  depends_on = [google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gcs, var.module_depends_on]
+
+  readiness_check {
+    path = "/"
+  }
+
+  env_variables = local.env_variables
+
+  automatic_scaling {
+    cool_down_period = "120s"
+    max_total_instances =  1
+    min_total_instances = 1
+    cpu_utilization {
+      target_utilization = 0.5
+    }
+  }
+  resources {
+    cpu = 1
+    memory_gb = 2
+  }
+  network {
+      name = var.network_short_name
+  }
+
+  beta_settings = {
+      cloud_sql_instances = format("%s=tcp:3306", var.db_instance)
+  }
+
+  noop_on_destroy = true
+  depends_on = [google_project_iam_member.gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
 }
 
-
-data "google_iam_policy" "noauth" {
-  binding {
-    role = "roles/run.invoker"
-    members = [
-      "allUsers",
-    ]
-  }
+resource "google_iap_brand" "project_brand" {
+  support_email     = var.consent_screen_support_email
+  application_title = "mlflow"
+  project           = data.google_project.project.number
 }
-
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location    = google_cloud_run_service.default.location
-  project     = google_cloud_run_service.default.project
-  service     = google_cloud_run_service.default.name
-
-  policy_data = data.google_iam_policy.noauth.policy_data
+resource "google_iap_client" "project_client" {
+  display_name = "mlflow"
+  brand        =  google_iap_brand.project_brand.name
+}
+resource "google_iap_app_engine_service_iam_binding" "member" {
+  project = data.google_project.project.name
+  app_id = data.google_project.project.name
+  service = google_app_engine_flexible_app_version.myapp_v1.service
+  role = "roles/iap.httpsResourceAccessor"
+  members = var.web_app_users
+  depends_on = [google_app_engine_flexible_app_version.myapp_v1]
 }

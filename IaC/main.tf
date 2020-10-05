@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
   }
-  required_version = "=0.12.29"
+  required_version = "~> 0.13.2"
   required_providers {
     google = "~> 3.13"
   }
@@ -15,19 +15,23 @@ provider "google-beta" {
   project = var.project_id
 }
 
+resource "random_id" "artifacts_bucket_name_suffix" {
+  byte_length = 5
+}
 
 module "network" {
   source = "./modules/network"
-  vpc_name = var.network_name
+  network_name = var.network_name
 }
 
 module "mlflow" {
   source = "./modules/mlflow"
-  artifacts_bucket_name = var.artifacts_bucket
+  artifacts_bucket_name = "${var.artifacts_bucket}-${random_id.artifacts_bucket_name_suffix.hex}"
   db_password_value = var.db_password_value
-  private_vpc_connection = module.network.private_vpc_connection
-  network_link = module.network.network_link
   server_docker_image = var.mlflow_docker_image
   project_id = var.project_id
-  vpc_connector = module.network.vpc_connector
+  consent_screen_support_email = var.consent_screen_support_email
+  web_app_users = var.web_app_users
+  network_self_link = module.network.network_self_link
+  network_short_name = module.network.network_short_name
 }
