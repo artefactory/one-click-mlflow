@@ -23,24 +23,28 @@ resource "google_app_engine_application" "app" {
 }
 
 resource "google_project_iam_member" "cloudsql" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/cloudsql.client"
   member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "secret" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/secretmanager.secretAccessor"
   member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "gcs" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/storage.objectAdmin"
   member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
 }
 
 resource "google_project_iam_member" "gae_api" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/compute.networkUser"
   member  = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
