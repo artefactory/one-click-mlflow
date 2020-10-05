@@ -1,0 +1,28 @@
+variable "project_id" {
+    description = "GCP project"
+    type = string
+}
+variable "backend_bucket" {
+    description = "Name of the bucket."
+    type        = string
+}
+variable "backend_bucket_location" {
+    description = "Location of the bucket."
+    type        = string
+    default     = "EUROPE-WEST1"
+}
+variable "versioning_enabled" {
+    description = "True if you want to version your bucket."
+    type        = bool
+    default     = true
+}
+variable "backend_bucket_number_of_version" {
+    description = "Number of version you want to keep with the versionning."
+    type        = number
+    default     = 3
+}
+variable "backend_bucket_storage_class" {
+    description = "Storage class of your bucket"
+    type        = string
+    default     ="STANDARD"
+}
