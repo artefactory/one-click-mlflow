@@ -4,9 +4,10 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 ## How to use
 
 ### Pre-requesites
-- A GCP project
+- A GCP project on which you are owner
 - Initialized gcloud SDK
 - Docker engine running
+- No app engine application running
 
 ### Deploying
 Fill out the `vars` file.
@@ -14,10 +15,10 @@ Fill out the `vars` file.
 |Variable name|Description|
 |---|---| 
 |`TF_VAR_project_id`|Name of the GCP project|
-|`TF_VAR_backend_bucket`|Name of the terraform backend bucket. Should be unique. No `gs://` prefix|
+|`TF_VAR_backend_bucket`|Name of the terraform backend bucket. Should be globally unique. No `gs://` prefix|
 |`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user|
 |`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'|
-|`TF_VAR_network_name`|The network the application and backend should attach to. If blank, a new network will be created.|
+|`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created.|
 
 **Run `make one-click-mlflow` and follow the prompts.**
 
@@ -35,7 +36,7 @@ You will need to specify the project id hosting the tracking server and the name
 - `export EXPERIMENT_NAME=<my_experiement>`
 
 To be able to push logs and artifacts to the tracking server, you will need to authenticate your request.
-Simply paste the following snippet in your `config.py` or `__init__.py`
+Simply paste the following snippet in your `config.py` or `__init__.py`.
 
 ````python
 import os
@@ -50,7 +51,7 @@ import requests
 def _get_client_id(service_uri):
     redirect_response = requests.get(service_uri, allow_redirects=False)
     if redirect_response.status_code != 302:
-        print(f"The URI {service_uri} does not seem to be a valid Cloud Composer Airflow webserver.")
+        print(f"The URI {service_uri} does not seem to be a valid AppEngine endpoint.")
         return None
 
     redirect_location = redirect_response.headers.get("location")
@@ -70,8 +71,8 @@ tracking_uri = f"https://{PROJECT_ID}.ew.r.appspot.com/"
 client_id = _get_client_id(tracking_uri)
 open_id_connect_token = id_token.fetch_id_token(Request(), client_id)
 os.environ["MLFLOW_TRACKING_TOKEN"] = open_id_connect_token
-set_tracking_uri(tracking_uri)
 
+set_tracking_uri(tracking_uri)
 set_experiment(EXPERIMENT_NAME)
 ````
 
