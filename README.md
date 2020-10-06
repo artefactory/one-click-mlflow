@@ -26,3 +26,68 @@ Fill out the `vars` file.
 - `make docker`: builds and pushes the application image
 - `make apply`: (re)deploys the infrastructure
 - `make destroy`: destroys the infrastructure. **Will not delete the OAuth consent screen, and the app engine application**
+
+
+### Pushing logs and artifacts
+
+You will need to specify the project id hosting the tracking server and the name of your MLFlow experiment:
+- `export PROJECT_ID=<my_mlflow_gcp_project>`
+- `export EXPERIMENT_NAME=<my_experiement>`
+
+To be able to push logs and artifacts to the tracking server, you will need to authenticate your request.
+Simply paste the following snippet in your `config.py` or `__init__.py`
+
+````python
+import os
+
+import six
+from mlflow import set_tracking_uri, set_experiment
+from google.auth.transport.requests import Request
+from google.oauth2 import id_token
+import requests
+
+
+def _get_client_id(service_uri):
+    redirect_response = requests.get(service_uri, allow_redirects=False)
+    if redirect_response.status_code != 302:
+        print(f"The URI {service_uri} does not seem to be a valid Cloud Composer Airflow webserver.")
+        return None
+
+    redirect_location = redirect_response.headers.get("location")
+    if not redirect_location:
+        print(f"No redirect location for request to {service_uri}")
+        return None
+
+    parsed = six.moves.urllib.parse.urlparse(redirect_location)
+    query_string = six.moves.urllib.parse.parse_qs(parsed.query)
+    return query_string["client_id"][0]
+
+
+PROJECT_ID = os.environ["PROJECT_ID"]
+EXPERIMENT_NAME = os.environ["EXPERIMENT_NAME"]
+
+tracking_uri = f"https://{PROJECT_ID}.ew.r.appspot.com/"
+client_id = _get_client_id(tracking_uri)
+open_id_connect_token = id_token.fetch_id_token(Request(), client_id)
+os.environ["MLFLOW_TRACKING_TOKEN"] = open_id_connect_token
+set_tracking_uri(tracking_uri)
+
+set_experiment(EXPERIMENT_NAME)
+````
+
+You shoud then be able to push logs and artifacts with:
+```python
+import os
+import mlflow
+
+# Log a parameter (key-value pair)
+mlflow.log_param("param1", 42)
+
+# Log a metric; metrics can be updated throughout the run
+mlflow.log_metric("foo", 42 + 1)
+mlflow.log_metric("foo", 42 + 2)
+mlflow.log_metric("foo", 42 + 3)
+
+# Log an artifact (output file)
+mlflow.log_artifacts("artifact_file_path")
+```
