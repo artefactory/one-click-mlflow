@@ -59,3 +59,9 @@ variable "service" {
     default = "default"
 }
 variable "network_short_name" {}
+variable "max_appengine_instances" {
+    default = 1
+}
+variable "min_appengine_instances" {
+    default = 1
+}

@@ -78,9 +78,14 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
 
   env_variables = local.env_variables
 
-  manual_scaling {
-    instances = 1
+  automatic_scaling {
+    cool_down_period = "120s"
+    max_total_instances = var.max_appengine_instances
+    min_total_instances = var.min_appengine_instances
+    cpu_utilization {
+      target_utilization = 0.5
   }
+
   resources {
     cpu = 1
     memory_gb = 2
