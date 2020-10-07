@@ -22,6 +22,14 @@ Fill out the `vars` file.
 
 **Run `make one-click-mlflow` and follow the prompts.**
 
+### What it does
+- Enables the necessary services
+- Builds and pushes the MLFlow docker image
+- Creates a private IP CloudSQL (MySQL) database for the tracking server
+- Creates an AppEngine Flex service for the web UI, secured by IAP
+- Manages all the network magic
+- Creates the `mlflow-log-pusher` service account
+
 ### Other available make commands
 - `make deploy`: builds and pushes the application image and (re)deploys the infrastructure
 - `make docker`: builds and pushes the application image
@@ -34,6 +42,9 @@ Fill out the `vars` file.
 You will need to specify the project id hosting the tracking server and the name of your MLFlow experiment:
 - `export PROJECT_ID=<my_mlflow_gcp_project>`
 - `export EXPERIMENT_NAME=<my_experiement>`
+
+You may also need to get a service account key for `mlflow-log-pusher` if you lack the necessary permissions:
+- `export GOOGLE_APPLICATION_CREDENTIALS=secrets/<my_key.json>`
 
 To be able to push logs and artifacts to the tracking server, you will need to authenticate your request.
 Simply paste the following snippet in your `config.py` or `__init__.py`.
