@@ -31,3 +31,8 @@ variable "storage_uniform" {
     description = "Wether or not uniform level acces is to be activated for the buckets"
     default = true
 }
+variable "tfstate_versionning" {
+    type = bool
+    description = "Wether or not the remote TFstate should be versioned"
+    default = true
+}

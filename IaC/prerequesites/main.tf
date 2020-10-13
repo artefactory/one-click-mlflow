@@ -32,4 +32,5 @@ module "bucket_backend" {
     number_of_version = var.backend_bucket_number_of_version
     storage_class = var.backend_bucket_storage_class
     storage_uniform = var.storage_uniform
+    versioning_enabled = var.tfstate_versionning
 }
