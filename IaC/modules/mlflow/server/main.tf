@@ -23,24 +23,35 @@ resource "google_app_engine_application" "app" {
 }
 
 resource "google_project_iam_member" "cloudsql" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/cloudsql.client"
   member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "secret" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/secretmanager.secretAccessor"
   member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
 }
 
 resource "google_project_iam_member" "gcs" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/storage.objectAdmin"
   member = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
 }
 
+resource "google_project_iam_member" "gae_gcs" {
+  depends_on = [google_app_engine_application.app]
+  project = data.google_project.project.project_id
+  role    = "roles/storage.objectViewer"
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
+}
+
 resource "google_project_iam_member" "gae_api" {
+  depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/compute.networkUser"
   member  = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
@@ -48,7 +59,7 @@ resource "google_project_iam_member" "gae_api" {
 
 resource "google_app_engine_flexible_app_version" "myapp_v1" {
   service    = var.service
-  version_id = "v1"
+  version_id = "v0"
   runtime    = "custom"
 
   deployment {
@@ -69,12 +80,13 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
 
   automatic_scaling {
     cool_down_period = "120s"
-    max_total_instances =  1
-    min_total_instances = 1
+    max_total_instances = var.max_appengine_instances
+    min_total_instances = var.min_appengine_instances
     cpu_utilization {
       target_utilization = 0.5
     }
   }
+
   resources {
     cpu = 1
     memory_gb = 2
@@ -88,7 +100,7 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
   }
 
   noop_on_destroy = true
-  depends_on = [google_project_iam_member.gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
+  depends_on = [google_project_iam_member.gcs, google_project_iam_member.gae_gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
 }
 
 resource "google_iap_brand" "project_brand" {
@@ -106,5 +118,4 @@ resource "google_iap_app_engine_service_iam_binding" "member" {
   service = google_app_engine_flexible_app_version.myapp_v1.service
   role = "roles/iap.httpsResourceAccessor"
   members = var.web_app_users
-  depends_on = [google_app_engine_flexible_app_version.myapp_v1]
 }

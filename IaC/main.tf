@@ -35,3 +35,9 @@ module "mlflow" {
   network_self_link = module.network.network_self_link
   network_short_name = module.network.network_short_name
 }
+
+module "log_pusher" {
+  source = "./modules/mlflow/log_pusher"
+  project_id = var.project_id
+  depends_on = [module.mlflow]
+}

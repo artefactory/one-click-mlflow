@@ -13,6 +13,7 @@ module "services" {
   source = "./../modules/services"
   project_id = var.project_id
   services = [
+    "cloudresourcemanager.googleapis.com",
     "container.googleapis.com",
     "servicenetworking.googleapis.com",
     "stackdriver.googleapis.com",
@@ -30,4 +31,6 @@ module "bucket_backend" {
     bucket_location = var.backend_bucket_location
     number_of_version = var.backend_bucket_number_of_version
     storage_class = var.backend_bucket_storage_class
+    storage_uniform = var.storage_uniform
+    versioning_enabled = var.tfstate_versionning
 }

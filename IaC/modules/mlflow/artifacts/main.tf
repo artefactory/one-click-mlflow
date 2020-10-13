@@ -13,4 +13,5 @@ resource "google_storage_bucket" "this" {
       type = "Delete"
     }
   }
+  uniform_bucket_level_access = var.storage_uniform
 }
