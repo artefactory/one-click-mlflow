@@ -58,10 +58,16 @@ variable "web_app_users" {
 variable "service" {
     default = "default"
 }
-variable "network_short_name" {}
+variable "network_short_name" {
+    type = string
+}
 variable "max_appengine_instances" {
+    description = "The maximum number of app engine instances to scale up to"
+    type = number
     default = 1
 }
 variable "min_appengine_instances" {
+    description = "The minimum number of app engine instances to scale down to"
+    type = number
     default = 1
 }
