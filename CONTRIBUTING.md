@@ -16,7 +16,8 @@ Pull requests are the best way to propose changes to the codebase (we use [Githu
 1. Fork the repo and create your branch from `master`.
 2. If needed, update the documentation.
 3. Make sure your code works.
-4. Issue that pull request!
+4. Don't forget to add licence header to every file if you added any.
+5. Issue that pull request!
 
 ## Report bugs using Github's [issues](https://github.com/briandk/transcriptase-atom/issues)
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](); it's that easy!
