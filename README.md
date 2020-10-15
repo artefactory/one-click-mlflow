@@ -5,9 +5,9 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 
 ### Pre-requesites
 - A GCP project on which you are owner
-- Initialized gcloud SDK
+- Initialized gcloud SDK with your owner account
 - Docker engine running
-- No app engine application running
+- No app engine application running and no consent screen already setup
 
 ### Deploying
 Fill out the `vars` file.
@@ -26,7 +26,7 @@ Fill out the `vars` file.
 - Enables the necessary services
 - Builds and pushes the MLFlow docker image
 - Creates a private IP CloudSQL (MySQL) database for the tracking server
-- Creates an AppEngine Flex service for the web UI, secured by IAP
+- Creates an AppEngine Flex  on the default service for the web UI, secured by IAP
 - Manages all the network magic
 - Creates the `mlflow-log-pusher` service account
 
