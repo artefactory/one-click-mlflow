@@ -15,20 +15,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-resource "google_storage_bucket" "this" {
-  name          = var.bucket_name
-  location      = var.bucket_location
-  storage_class = var.storage_class
-  versioning {
-    enabled = var.versioning_enabled
-  }
-  lifecycle_rule {
-    condition {
-      num_newer_versions = var.number_of_version
-    }
-    action {
-      type = "Delete"
-    }
-  }
-  uniform_bucket_level_access = var.storage_uniform
+output "network_self_link" {
+  value = data.google_compute_network.default_network.self_link
+}
+
+output "network_short_name" {
+  value = data.google_compute_network.default_network.name
 }

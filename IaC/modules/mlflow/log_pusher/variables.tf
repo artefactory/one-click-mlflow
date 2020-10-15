@@ -15,20 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-resource "google_storage_bucket" "this" {
-  name          = var.bucket_name
-  location      = var.bucket_location
-  storage_class = var.storage_class
-  versioning {
-    enabled = var.versioning_enabled
-  }
-  lifecycle_rule {
-    condition {
-      num_newer_versions = var.number_of_version
-    }
-    action {
-      type = "Delete"
-    }
-  }
-  uniform_bucket_level_access = var.storage_uniform
+variable "project_id" {
+  type = string
 }
