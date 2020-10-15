@@ -28,6 +28,6 @@ resource "google_project_iam_member" "log_pusher_iap" {
 
 resource "google_project_iam_member" "log_pusher_storage" {
   project = var.project_id
-  role    = "roles/storage.objectCreator"
+  role    = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.log_pusher.email}"
 }
