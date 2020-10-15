@@ -43,14 +43,14 @@ resource "google_project_iam_member" "cloudsql" {
   depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/cloudsql.client"
-  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
 resource "google_project_iam_member" "secret" {
   depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/secretmanager.secretAccessor"
-  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
 resource "google_project_iam_member" "gcs" {
@@ -64,14 +64,14 @@ resource "google_project_iam_member" "gae_gcs" {
   depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/storage.objectViewer"
-  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
+  member = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
 resource "google_project_iam_member" "gae_api" {
   depends_on = [google_app_engine_application.app]
   project = data.google_project.project.project_id
   role    = "roles/compute.networkUser"
-  member  = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.name)
+  member  = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
 resource "google_app_engine_flexible_app_version" "myapp_v1" {
@@ -130,8 +130,8 @@ resource "google_iap_client" "project_client" {
   brand        =  google_iap_brand.project_brand.name
 }
 resource "google_iap_app_engine_service_iam_binding" "member" {
-  project = data.google_project.project.name
-  app_id = data.google_project.project.name
+  project = data.google_project.project.project_id
+  app_id = data.google_project.project.project_id
   service = google_app_engine_flexible_app_version.myapp_v1.service
   role = "roles/iap.httpsResourceAccessor"
   members = var.web_app_users
