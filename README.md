@@ -5,6 +5,7 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 
 ### Pre-requesites
 - A GCP project on which you are owner
+- Terraform >= 0.13.2 installed
 - Initialized gcloud SDK with your owner account
 - Docker engine running
 - No app engine application running and no consent screen already setup
@@ -17,10 +18,11 @@ Fill out the `vars` file.
 |`TF_VAR_project_id`|Name of the GCP project|
 |`TF_VAR_backend_bucket`|Name of the terraform backend bucket. Should be globally unique. No `gs://` prefix|
 |`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user|
-|`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'|
+|`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'. Email addresses and domains must be associated with an active Google Account, G Suite account, or Cloud Identity account.|
 |`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created.|
 
 **Run `make one-click-mlflow` and follow the prompts.**
+
 
 ### What it does
 - Enables the necessary services
