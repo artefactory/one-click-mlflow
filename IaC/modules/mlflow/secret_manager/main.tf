@@ -32,5 +32,5 @@ resource "google_secret_manager_secret_version" "secret-version" {
   secret = google_secret_manager_secret.secret.id
 
   secret_data = var.secret_value
-  depends_on = [google_secret_manager_secret.secret]
+  depends_on  = [google_secret_manager_secret.secret]
 }

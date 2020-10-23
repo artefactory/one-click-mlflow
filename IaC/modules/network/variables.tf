@@ -16,13 +16,13 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 variable "network_name" {
-    type = string
-    description = "Name of the network to attach to. If empty, a new network will be created"
+  type        = string
+  description = "Name of the network to attach to. If empty, a new network will be created"
 }
 
 variable "network_name_local" {
-    type = string
-    description = "Name of the network to create if network_name does not exist already"
-    default = "mlflow-network"
+  type        = string
+  description = "Name of the network to create if network_name does not exist already"
+  default     = "mlflow-network"
 }
 
