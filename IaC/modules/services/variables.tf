@@ -16,10 +16,10 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 variable "project_id" {
-    description = "Id of your project"
-    type = string
+  description = "Id of your project"
+  type        = string
 }
 variable "services" {
-    description = "List of url of the service you want to activate"
-    type = list(string)
+  description = "List of url of the service you want to activate"
+  type        = list(string)
 }

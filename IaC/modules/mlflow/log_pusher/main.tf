@@ -23,11 +23,11 @@ resource "google_service_account" "log_pusher" {
 resource "google_project_iam_member" "log_pusher_iap" {
   project = var.project_id
   role    = "roles/iap.httpsResourceAccessor"
-  member = "serviceAccount:${google_service_account.log_pusher.email}"
+  member  = "serviceAccount:${google_service_account.log_pusher.email}"
 }
 
 resource "google_project_iam_member" "log_pusher_storage" {
   project = var.project_id
   role    = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.log_pusher.email}"
+  member  = "serviceAccount:${google_service_account.log_pusher.email}"
 }
