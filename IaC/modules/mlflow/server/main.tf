@@ -88,6 +88,10 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
   }
 
   noop_on_destroy = true
+
+  timeouts {
+    create = "20m"
+  }
   depends_on = [google_project_iam_member.gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
 }
 
