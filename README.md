@@ -15,8 +15,8 @@ Fill out the `vars` file.
 
 |Variable name|Description|
 |---|---| 
-|`TF_VAR_project_id`|Name of the GCP project|
-|`TF_VAR_backend_bucket`|Name of the terraform backend bucket. Should be globally unique. No `gs://` prefix|
+|`TF_VAR_project_id`|ID of the GCP project (not necessarily the same as the projet name)|
+|`TF_VAR_backend_bucket`|Name of the terraform backend bucket to be created. Should be globally unique. No `gs://` prefix|
 |`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user|
 |`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'. Email addresses and domains must be associated with an active Google Account, G Suite account, or Cloud Identity account.|
 |`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created.|
@@ -104,4 +104,5 @@ mlflow.log_metric("foo", 42 + 3)
 
 # Log an artifact (output file)
 mlflow.log_artifact("artifact_file_path")
+
 ```
