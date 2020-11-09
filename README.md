@@ -103,5 +103,5 @@ mlflow.log_metric("foo", 42 + 2)
 mlflow.log_metric("foo", 42 + 3)
 
 # Log an artifact (output file)
-mlflow.log_artifacts("artifact_file_path")
+mlflow.log_artifact("artifact_file_path")
 ```
