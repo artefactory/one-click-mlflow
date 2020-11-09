@@ -31,4 +31,7 @@ init: pre-requesites
 
 deploy: docker apply
 
-one-click-mlflow : init deploy
+one-click-mlflow: init deploy
+
+.PHONY: pre-requesites build-docker push-docker init-terraform apply-terraform plan-terraform destroy-terraform
+.PHONY: apply plan destroy docker init deploy one-click-mlflow
