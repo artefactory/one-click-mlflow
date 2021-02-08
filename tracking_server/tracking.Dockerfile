@@ -29,6 +29,7 @@ ENV PATH $PATH:/root/google-cloud-sdk/bin
 RUN gcloud components install beta -q
 
 COPY requirements.txt .
+RUN python -m pip install pip==21.0.1
 RUN pip install -r requirements.txt
 
 COPY run_tracking.sh .
