@@ -1,15 +1,25 @@
-# one-click-mlflow
+# 1. one-click-mlflow
 A tool to deploy a mostly serverless MLflow on a GCP project with one command
 
-## How to use
+- [1. one-click-mlflow](#1-one-click-mlflow)
+  - [1.1. How to use](#11-how-to-use)
+    - [1.1.1. Pre-requesites](#111-pre-requesites)
+    - [1.1.2. Deploying](#112-deploying)
+    - [1.1.3. What it does](#113-what-it-does)
+    - [1.1.4. Other available make commands](#114-other-available-make-commands)
+    - [1.1.5. Pushing logs and artifacts](#115-pushing-logs-and-artifacts)
 
-### Pre-requesites
+
+
+## 1.1. How to use
+
+### 1.1.1. Pre-requesites
 - A GCP project on which you are owner
-- Terraform >= 0.13.2 installed
+- Terraform >= 0.13.2 < 0.14 installe∏d
 - Initialized gcloud SDK with your owner account
 - Docker engine running with rights to push to container registry (You can just run `gcloud auth configure-docker`)
 
-### Deploying
+### 1.1.2. Deploying
 Fill out the `vars` file.
 
 |Variable name|Description|
@@ -22,12 +32,12 @@ Fill out the `vars` file.
 |`TF_VAR_oauth_client_id`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client id. Otherwise, leave it blank.|
 |`TF_VAR_oauth_client_secret`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client secret. Otherwise, leave it blank|
 
-You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_client_id` and `TF_VAR_oauth_client_secret`).
+You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_client_id` and `TF_VAR_oauth_client_secret`). Client id and client secret can be found on [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
 
 **Run `make one-click-mlflow` and follow the prompts.**
 
 
-### What it does
+### 1.1.3. What it does
 - Enables the necessary services
 - Builds and pushes the MLFlow docker image
 - Creates a private IP CloudSQL (MySQL) database for the tracking server
@@ -35,14 +45,14 @@ You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_c
 - Manages all the network magic
 - Creates the `mlflow-log-pusher` service account
 
-### Other available make commands
+### 1.1.4. Other available make commands
 - `make deploy`: builds and pushes the application image and (re)deploys the infrastructure
 - `make docker`: builds and pushes the application image
 - `make apply`: (re)deploys the infrastructure
-- `make destroy`: destroys the infrastructure. **Will not delete the OAuth consent screen, and the app engine application**
+- `make destroy`: destroys the infrastructure. **Will not delete the OAuth consent screen, and the app engine application**. If you destroy it and wants to redeploy on the same project, don't forget to set up `TF_VAR_oauth_client_id` and `TF_VAR_oauth_client_secret` instead of `TF_VAR_consent_screen_support_email`
 
 
-### Pushing logs and artifacts
+### 1.1.5. Pushing logs and artifacts
 
 You will need to specify the project id hosting the tracking server and the name of your MLFlow experiment:
 - `export PROJECT_ID=<my_mlflow_gcp_project>`
@@ -83,7 +93,7 @@ def _get_client_id(service_uri):
 PROJECT_ID = os.environ["PROJECT_ID"]
 EXPERIMENT_NAME = os.environ["EXPERIMENT_NAME"]
 
-# If mlflow if not deployed on the default app engine service, change it with the url of your service
+# If mlflow if not deployed on the default app engine service, change it with the url of your service <!-- omit in toc --> 
 tracking_uri = f"https://{PROJECT_ID}.ew.r.appspot.com/"
 client_id = _get_client_id(tracking_uri)
 open_id_connect_token = id_token.fetch_id_token(Request(), client_id)

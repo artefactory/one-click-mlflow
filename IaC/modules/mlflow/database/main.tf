@@ -35,6 +35,7 @@ resource "google_sql_database_instance" "this_instance" {
     }
     availability_type = var.availability_type
   }
+  deletion_protection = false
 }
 
 resource "google_sql_database" "this_database" {
