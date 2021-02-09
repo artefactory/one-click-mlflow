@@ -7,8 +7,7 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 - A GCP project on which you are owner
 - Terraform >= 0.13.2 installed
 - Initialized gcloud SDK with your owner account
-- Docker engine running
-- No app engine application running and no consent screen already setup
+- Docker engine running with rights to push to container registry (You can just run `gcloud auth configure-docker`)
 
 ### Deploying
 Fill out the `vars` file.
@@ -17,9 +16,13 @@ Fill out the `vars` file.
 |---|---| 
 |`TF_VAR_project_id`|ID of the GCP project (not necessarily the same as the projet name)|
 |`TF_VAR_backend_bucket`|Name of the terraform backend bucket to be created. Should be globally unique. No `gs://` prefix|
-|`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user|
 |`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'. Email addresses and domains must be associated with an active Google Account, G Suite account, or Cloud Identity account.|
 |`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created.|
+|`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user. If you have already set-up your consent screen on the GCP project you can leave it blank|
+|`TF_VAR_oauth_client_id`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client id. Otherwise, leave it blank.|
+|`TF_VAR_oauth_client_secret`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client secret. Otherwise, leave it blank|
+
+You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_client_id` and `TF_VAR_oauth_client_secret`).
 
 **Run `make one-click-mlflow` and follow the prompts.**
 
@@ -80,6 +83,7 @@ def _get_client_id(service_uri):
 PROJECT_ID = os.environ["PROJECT_ID"]
 EXPERIMENT_NAME = os.environ["EXPERIMENT_NAME"]
 
+# If mlflow if not deployed on the default app engine service, change it with the url of your service
 tracking_uri = f"https://{PROJECT_ID}.ew.r.appspot.com/"
 client_id = _get_client_id(tracking_uri)
 open_id_connect_token = id_token.fetch_id_token(Request(), client_id)

@@ -34,8 +34,8 @@ resource "google_app_engine_application" "app" {
   location_id = var.location
   iap {
     enabled              = true
-    oauth2_client_id     = google_iap_client.project_client.client_id
-    oauth2_client_secret = google_iap_client.project_client.secret
+    oauth2_client_id     = var.oauth_client_id != "" ? var.oauth_client_id : google_iap_client.project_client.client_id
+    oauth2_client_secret = var.oauth_client_secret != "" ? var.oauth_client_secret : google_iap_client.project_client.secret
   }
 }
 
@@ -116,7 +116,7 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
     cloud_sql_instances = format("%s=tcp:3306", var.db_instance)
   }
 
-  noop_on_destroy = true
+  delete_service_on_destroy = true
 
   timeouts {
     create = "20m"
@@ -125,11 +125,13 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
 }
 
 resource "google_iap_brand" "project_brand" {
+  count = var.consent_screen_support_email == "" ? 0 : 1
   support_email     = var.consent_screen_support_email
   application_title = "mlflow"
   project           = data.google_project.project.number
 }
 resource "google_iap_client" "project_client" {
+  count = var.consent_screen_support_email == "" ? 0 : 1
   display_name = "mlflow"
   brand        = google_iap_brand.project_brand.name
 }

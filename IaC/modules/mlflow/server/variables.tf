@@ -15,10 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-variable "server_name" {
-  type        = string
-  description = "Name of your server"
-}
 variable "location" {
   type        = string
   description = "Location to deploy your server"
@@ -73,7 +69,8 @@ variable "web_app_users" {
   description = "List of people who can acess the mlflow web app. e.g. [user:jane@example.com, group:people@example.com]"
 }
 variable "service" {
-  default = "default"
+  description = "Name of the app engine service"
+  type = string
 }
 variable "network_short_name" {
   type = string
@@ -87,4 +84,12 @@ variable "min_appengine_instances" {
   description = "The minimum number of app engine instances to scale down to"
   type        = number
   default     = 1
+}
+variable "oauth_client_id" {
+  type        = string
+  description = "Oauth client id, empty if consent screen not set up"
+}
+variable "oauth_client_secret" {
+  type        = string
+  description = "Oauth client secret, empty if consent screen not set up"
 }

@@ -44,7 +44,7 @@ module "database" {
 
 module "server" {
   source                       = "./server"
-  server_name                  = var.mlflow_server
+  service                      = var.mlflow_server
   location                     = var.server_location
   docker_image_name            = var.server_docker_image
   env_variables                = var.server_env_variables
@@ -59,4 +59,6 @@ module "server" {
   consent_screen_support_email = var.consent_screen_support_email
   web_app_users                = var.web_app_users
   network_short_name           = var.network_short_name
+  oauth_client_id              = var.oauth_client_id
+  oauth_client_secret          = var.oauth_client_secret
 }
