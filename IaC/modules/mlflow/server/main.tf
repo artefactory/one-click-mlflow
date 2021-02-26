@@ -116,7 +116,8 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
     cloud_sql_instances = format("%s=tcp:3306", var.db_instance)
   }
 
-  delete_service_on_destroy = true
+  delete_service_on_destroy = var.service == "default" ? false : true
+  noop_on_destroy = var.service == "default" ? true : false
 
   timeouts {
     create = "20m"
