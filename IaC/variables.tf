@@ -49,3 +49,20 @@ variable "storage_uniform" {
   description = "Wether or not uniform level acces is to be activated for the buckets"
   default     = true
 }
+variable "mlflow_server" {
+  description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."
+  type        = string
+  default     = "mlflow"
+}
+variable "nb_app_engine_services" {
+  description = "Number of app engine services deployed. If 0, server name will be default"
+  type        = number
+}
+variable "oauth_client_id" {
+  type        = string
+  description = "Oauth client id, empty if consent screen not set up"
+}
+variable "oauth_client_secret" {
+  type        = string
+  description = "Oauth client secret, empty if consent screen not set up"
+}

@@ -79,9 +79,8 @@ variable "db_name" {
   default     = "mlflow"
 }
 variable "mlflow_server" {
-  description = "Name of the mlflow server deployed to cloud run"
+  description = "Name of the mlflow server deployed to app engine."
   type        = string
-  default     = "mlflow"
 }
 variable "server_location" {
   description = "Location to deploy cloud run server"
@@ -117,3 +116,11 @@ variable "network_self_link" {
   type = string
 }
 variable "network_short_name" {}
+variable "oauth_client_id" {
+  type        = string
+  description = "Oauth client id, empty if consent screen not set up"
+}
+variable "oauth_client_secret" {
+  type        = string
+  description = "Oauth client secret, empty if consent screen not set up"
+}

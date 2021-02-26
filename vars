@@ -1,5 +1,7 @@
 export TF_VAR_project_id=
 export TF_VAR_backend_bucket=
-export TF_VAR_consent_screen_support_email=
 export TF_VAR_web_app_users=
 export TF_VAR_network_name=
+export TF_VAR_consent_screen_support_email=
+export TF_VAR_oauth_client_id=
+export TF_VAR_oauth_client_secret=

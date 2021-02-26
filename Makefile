@@ -16,10 +16,13 @@ apply-terraform:
 plan-terraform:
 	source vars_base && cd Iac && terraform plan
 
+import-terraform:
+	source vars_base && cd Iac && ./../bin/terraform_import.sh
+
 destroy-terraform:
 	source vars_base && cd Iac && terraform destroy
 
-apply: init-terraform apply-terraform
+apply: init-terraform import-terraform apply-terraform
 
 plan: init-terraform plan-terraform
 
@@ -33,5 +36,5 @@ deploy: docker apply
 
 one-click-mlflow: init deploy
 
-.PHONY: pre-requesites build-docker push-docker init-terraform apply-terraform plan-terraform destroy-terraform
+.PHONY: pre-requesites build-docker push-docker init-terraform apply-terraform plan-terraform import-terraform destroy-terraform
 .PHONY: apply plan destroy docker init deploy one-click-mlflow

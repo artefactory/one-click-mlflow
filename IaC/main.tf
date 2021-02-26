@@ -51,6 +51,9 @@ module "mlflow" {
   web_app_users                = var.web_app_users
   network_self_link            = module.network.network_self_link
   network_short_name           = module.network.network_short_name
+  mlflow_server                = var.nb_app_engine_services != 0 ? var.mlflow_server : "default"
+  oauth_client_id              = var.oauth_client_id
+  oauth_client_secret          = var.oauth_client_secret
 }
 
 module "log_pusher" {
