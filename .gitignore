@@ -3,3 +3,11 @@
 *.tfstate
 *.tfstate.backup
 *.tfvars
+IaC/*/*.hcl
+IaC/*.hcl
+
+#secrets
+secrets/
+
+#python
+*/__pycache__/
