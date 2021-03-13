@@ -8,4 +8,4 @@ jobs:
     - name: test
       uses: instrumenta/conftest-action@master
       with:
-        files: tracking_server/tracking.Dockerfile
+        files: tracking_server/Dockerfile
