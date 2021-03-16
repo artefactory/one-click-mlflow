@@ -38,7 +38,8 @@ module "services" {
     "appengineflex.googleapis.com",
     "sqladmin.googleapis.com",
     "secretmanager.googleapis.com",
-    "iap.googleapis.com"
+    "iap.googleapis.com",
+    "cloudbuild.googleapis.com"
   ]
 }
 
