@@ -1,5 +1,7 @@
 pre-requesites:
 	source vars_base && cd Iac/prerequesites && terraform init && terraform apply
+pre-requesites-cicd:
+	source vars_base && cd Iac/prerequesites && terraform init && terraform apply -auto-approve
 
 docker:
 	source vars_base && gcloud builds submit --tag $${TF_VAR_mlflow_docker_image} ./tracking_server
@@ -29,12 +31,13 @@ plan: init-terraform plan-terraform
 destroy: init-terraform destroy-terraform
 
 init: pre-requesites
+init-cicd: pre-requesites-cicd
 
 deploy: docker apply
 deploy-cicd: docker apply-cicd
 
 one-click-mlflow: init deploy
-one-click-mlflow-cicd: init deploy-cicd
+one-click-mlflow-cicd: init-cicd deploy-cicd
 
-.PHONY: pre-requesites docker init-terraform apply-terraform apply-terraform-cicd plan-terraform import-terraform destroy-terraform
-.PHONY: apply apply-cicd plan destroy docker init deploy deploy-cicd one-click-mlflow one-click-mlflow-cicd
+.PHONY: pre-requesites pre-requesites-cicd docker init-terraform apply-terraform apply-terraform-cicd plan-terraform import-terraform destroy-terraform
+.PHONY: apply apply-cicd plan destroy docker init init-cicd deploy deploy-cicd one-click-mlflow one-click-mlflow-cicd
