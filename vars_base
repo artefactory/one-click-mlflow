@@ -5,3 +5,8 @@ export DOCKER_TAG=0.1
 export TF_VAR_mlflow_docker_image=$DOCKER_REPO/$TF_VAR_project_id/$DOCKER_NAME:$DOCKER_TAG
 nb_app=$(gcloud --format json --project $TF_VAR_project_id app services list 2> /dev/null | jq length)
 export TF_VAR_nb_app_engine_services=${nb_app:-0}
+if gcloud app describe 1> /dev/null 2> /dev/null ; then
+    export app_exists=1
+else
+    export app_exists=0
+fi
