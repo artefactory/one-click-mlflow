@@ -9,6 +9,8 @@ init-terraform:
 
 apply-terraform:
 	source vars_base && cd Iac && terraform apply
+apply-terraform-cicd:
+	source vars_base && cd Iac && terraform apply -auto-approve
 
 plan-terraform:
 	source vars_base && cd Iac && terraform plan
@@ -20,6 +22,7 @@ destroy-terraform:
 	source vars_base && cd Iac && terraform destroy
 
 apply: init-terraform import-terraform apply-terraform
+apply-cicd: init-terraform import-terraform apply-terraform-cicd
 
 plan: init-terraform plan-terraform
 
@@ -28,8 +31,10 @@ destroy: init-terraform destroy-terraform
 init: pre-requesites
 
 deploy: docker apply
+deploy-cicd: docker apply-cicd
 
 one-click-mlflow: init deploy
+one-click-mlflow-cicd: init deploy-cicd
 
-.PHONY: pre-requesites docker init-terraform apply-terraform plan-terraform import-terraform destroy-terraform
-.PHONY: apply plan destroy docker init deploy one-click-mlflow
+.PHONY: pre-requesites docker init-terraform apply-terraform apply-terraform-cicd plan-terraform import-terraform destroy-terraform
+.PHONY: apply apply-cicd plan destroy docker init deploy deploy-cicd one-click-mlflow one-click-mlflow-cicd
