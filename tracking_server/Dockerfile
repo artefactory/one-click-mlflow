@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-FROM python:3.7
+FROM google/cloud-sdk:latest
 
 WORKDIR /mlflow/
 
@@ -24,12 +24,7 @@ RUN mkdir -p /mlflow/ \
   && apt-get -y install --no-install-recommends apt-transport-https \
   ca-certificates gnupg default-libmysqlclient-dev libpq-dev build-essential curl
 
-RUN curl -sSL https://sdk.cloud.google.com | bash
-ENV PATH $PATH:/root/google-cloud-sdk/bin
-RUN gcloud components install beta -q
-
 COPY requirements.txt .
-RUN python -m pip install pip==21.0.1
 RUN pip install -r requirements.txt
 
 COPY run_tracking.sh .
