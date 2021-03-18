@@ -54,6 +54,9 @@ You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_c
 
 
 ### 1.1.5. Pushing logs and artifacts
+Firstly create a python virtual environment to run your project and install mlflow and google-auth-oauthlib:
+
+- `python3 -m venv venv && source venv/bin/activate && pip install google-auth-oauthlib mlflow`
 
 You will need to specify the project id hosting the tracking server and the name of your MLFlow experiment:
 - `export PROJECT_ID=<my_mlflow_gcp_project>`
@@ -61,6 +64,9 @@ You will need to specify the project id hosting the tracking server and the name
 
 You may also need to get a service account key for `mlflow-log-pusher` if you lack the necessary permissions:
 - `export GOOGLE_APPLICATION_CREDENTIALS=secrets/<my_key.json>`
+
+You can now make your initial push of metrics by executing:
+- ```python examples/track_experiment.py```
 
 To be able to push logs and artifacts to the tracking server, you will need to authenticate your request.
 Simply paste the following snippet in your `config.py` or `__init__.py`.
