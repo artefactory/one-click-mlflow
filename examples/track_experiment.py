@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+
 import mlflow
 import mlflow_config
 
@@ -9,3 +11,8 @@ mlflow.log_param("bar", 42)
 # Log a metric; metrics can be updated throughout the run
 for k in range(6):
     mlflow.log_metric("foo", 2**k)
+
+# Log an artifact (output file)
+mlflow.log_artifact(Path(__file__).parent / "artifact.csv")
+
+print("Sucessfully pushed logs, metrics, and artifacts")
