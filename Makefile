@@ -7,7 +7,7 @@ docker:
 	source vars_base && gcloud builds submit --tag $${TF_VAR_mlflow_docker_image} ./tracking_server
 
 init-terraform:
-	source vars_base && cd Iac && rm -r .terraform && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}"
+	source vars_base && cd Iac && rm -rf .terraform && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}"
 
 apply-terraform:
 	source vars_base && cd Iac && terraform apply
