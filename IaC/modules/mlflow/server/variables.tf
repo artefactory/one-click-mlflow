@@ -68,9 +68,13 @@ variable "web_app_users" {
   type        = list(string)
   description = "List of people who can acess the mlflow web app. e.g. [user:jane@example.com, group:people@example.com]"
 }
-variable "service" {
-  description = "Name of the app engine service"
-  type = string
+variable "create_default_service" {
+  description = "Whether or not to create a default app engine service"
+  type = bool
+}
+variable "mlflow_server" {
+  description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."
+  type        = string
 }
 variable "network_short_name" {
   type = string

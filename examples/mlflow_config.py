@@ -55,7 +55,7 @@ PROJECT_ID = input("Enter your project ID: ")
 EXPERIMENT_NAME = input("Enter the name of your MLFlow experiment: ")
 
 # If mlflow if not deployed on the default app engine service, change it with the url of your service <!-- omit in toc -->
-tracking_uri = f"https://{PROJECT_ID}.ew.r.appspot.com/"
+tracking_uri = f"https://mlflow-dot-{PROJECT_ID}.ew.r.appspot.com"
 
 os.environ["MLFLOW_TRACKING_TOKEN"] = get_token()
 

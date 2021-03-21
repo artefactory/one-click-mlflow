@@ -78,8 +78,12 @@ variable "db_name" {
   type        = string
   default     = "mlflow"
 }
+variable "create_default_service" {
+  description = "Whether or not to create a default app engine service"
+  type = bool
+}
 variable "mlflow_server" {
-  description = "Name of the mlflow server deployed to app engine."
+  description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."
   type        = string
 }
 variable "server_location" {

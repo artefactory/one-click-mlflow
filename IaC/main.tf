@@ -43,6 +43,7 @@ module "network" {
 
 module "mlflow" {
   source                       = "./modules/mlflow"
+  mlflow_server                = var.mlflow_server
   artifacts_bucket_name        = "${var.artifacts_bucket}-${random_id.artifacts_bucket_name_suffix.hex}"
   db_password_value            = var.db_password_value
   server_docker_image          = var.mlflow_docker_image
@@ -51,7 +52,7 @@ module "mlflow" {
   web_app_users                = var.web_app_users
   network_self_link            = module.network.network_self_link
   network_short_name           = module.network.network_short_name
-  mlflow_server                = var.nb_app_engine_services != 0 ? var.mlflow_server : "default"
+  create_default_service       = var.create_default_service == 1 ? true : false
   oauth_client_id              = var.oauth_client_id
   oauth_client_secret          = var.oauth_client_secret
 }

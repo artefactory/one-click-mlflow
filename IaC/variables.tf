@@ -54,8 +54,8 @@ variable "mlflow_server" {
   type        = string
   default     = "mlflow"
 }
-variable "nb_app_engine_services" {
-  description = "Number of app engine services deployed. If 0, server name will be default"
+variable "create_default_service" {
+  description = "Whether or not to deploy a default AppEngine App"
   type        = number
 }
 variable "oauth_client_id" {

@@ -74,8 +74,41 @@ resource "google_project_iam_member" "gae_api" {
   member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
-resource "google_app_engine_flexible_app_version" "myapp_v1" {
-  service    = var.service
+resource "google_app_engine_flexible_app_version" "default_app" {
+  count = var.create_default_service ? 1 : 0
+  service = "default"
+  version_id = "mlflow-default"
+  runtime    = "custom"
+
+  deployment {
+    container {
+      image = "gcr.io/cloudrun/hello"
+    }
+  }
+
+  liveness_check {
+    path = "/"
+  }
+
+  readiness_check {
+    path = "/"
+  }
+
+  automatic_scaling {
+    cool_down_period = "120s"
+    min_total_instances = 1
+    max_total_instances = 1
+    cpu_utilization {
+      target_utilization = 0.5
+    }
+  }
+
+  delete_service_on_destroy = false
+  noop_on_destroy = true
+}
+
+resource "google_app_engine_flexible_app_version" "mlflow_app" {
+  service    = var.mlflow_server
   version_id = "v0"
   runtime    = "custom"
 
@@ -116,13 +149,20 @@ resource "google_app_engine_flexible_app_version" "myapp_v1" {
     cloud_sql_instances = format("%s=tcp:3306", var.db_instance)
   }
 
-  delete_service_on_destroy = var.service == "default" ? false : true
-  noop_on_destroy = var.service == "default" ? true : false
+  delete_service_on_destroy = true
+  noop_on_destroy = false
 
   timeouts {
     create = "20m"
   }
-  depends_on      = [google_project_iam_member.gcs, google_project_iam_member.gae_gcs, google_project_iam_member.cloudsql, google_project_iam_member.secret, google_project_iam_member.gae_api]
+  depends_on      = [
+    google_app_engine_flexible_app_version.default_app,
+    google_project_iam_member.gcs,
+    google_project_iam_member.gae_gcs,
+    google_project_iam_member.cloudsql,
+    google_project_iam_member.secret,
+    google_project_iam_member.gae_api
+  ]
 }
 
 resource "google_iap_brand" "project_brand" {
@@ -139,7 +179,7 @@ resource "google_iap_client" "project_client" {
 resource "google_iap_app_engine_service_iam_binding" "member" {
   project = data.google_project.project.project_id
   app_id  = data.google_project.project.project_id
-  service = google_app_engine_flexible_app_version.myapp_v1.service
+  service = google_app_engine_flexible_app_version.mlflow_app.service
   role    = "roles/iap.httpsResourceAccessor"
   members = var.web_app_users
 }
