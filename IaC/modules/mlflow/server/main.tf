@@ -176,10 +176,12 @@ resource "google_iap_client" "project_client" {
   display_name = "mlflow"
   brand        = google_iap_brand.project_brand[0].name
 }
-resource "google_iap_app_engine_service_iam_binding" "member" {
-  project = data.google_project.project.project_id
-  app_id  = data.google_project.project.project_id
-  service = google_app_engine_flexible_app_version.mlflow_app.service
-  role    = "roles/iap.httpsResourceAccessor"
-  members = var.web_app_users
+
+resource "google_iap_app_engine_service_iam_member" "member" {
+  for_each = toset(var.web_app_users)
+  project  = data.google_project.project.project_id
+  app_id   = data.google_project.project.project_id
+  service  = google_app_engine_flexible_app_version.mlflow_app.service
+  role     = "roles/iap.httpsResourceAccessor"
+  member   = each.key
 }
