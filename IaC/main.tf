@@ -18,7 +18,7 @@
 terraform {
   backend "gcs" {
   }
-  required_version = "~> 0.13.2"
+  required_version = "> 0.13.2"
   required_providers {
     google = "~> 3.13"
   }

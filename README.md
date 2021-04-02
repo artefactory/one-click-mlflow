@@ -15,9 +15,10 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 
 ### 1.1.1. Pre-requesites
 - A GCP project on which you are owner
-- Terraform >= 0.13.2 < 0.14 installe∏d
+- Terraform > 0.13.2 installed
 - Initialized gcloud SDK with your owner account
 - Docker engine running with rights to push to container registry (You can just run `gcloud auth configure-docker`)
+- Install jq, for example with `brew install jq`
 
 ### 1.1.2. Deploying
 Fill out the `vars` file.
@@ -27,7 +28,7 @@ Fill out the `vars` file.
 |`TF_VAR_project_id`|ID of the GCP project (not necessarily the same as the projet name)|
 |`TF_VAR_backend_bucket`|Name of the terraform backend bucket to be created. Should be globally unique. No `gs://` prefix|
 |`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'. Email addresses and domains must be associated with an active Google Account, G Suite account, or Cloud Identity account.|
-|`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created.|
+|`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created. Hint: unless otherwise specified, a network named "default" will already exist on the project. To plug into this network, type TF_VAR_network_name=default into this variable.|
 |`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user. If you have already set-up your consent screen on the GCP project you can leave it blank|
 |`TF_VAR_oauth_client_id`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client id. Otherwise, leave it blank.|
 |`TF_VAR_oauth_client_secret`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client secret. Otherwise, leave it blank|
@@ -53,6 +54,9 @@ You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_c
 
 
 ### 1.1.5. Pushing logs and artifacts
+Firstly create a python virtual environment to run your project and install mlflow and google-auth-oauthlib:
+
+- `python3 -m venv venv && source venv/bin/activate && pip install google-auth-oauthlib mlflow`
 
 You will need to specify the project id hosting the tracking server and the name of your MLFlow experiment:
 - `export PROJECT_ID=<my_mlflow_gcp_project>`
@@ -60,6 +64,9 @@ You will need to specify the project id hosting the tracking server and the name
 
 You may also need to get a service account key for `mlflow-log-pusher` if you lack the necessary permissions:
 - `export GOOGLE_APPLICATION_CREDENTIALS=secrets/<my_key.json>`
+
+You can now make your initial push of metrics by executing:
+- ```python examples/track_experiment.py```
 
 To be able to push logs and artifacts to the tracking server, you will need to authenticate your request.
 Simply paste the following snippet in your `config.py` or `__init__.py`.

@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 terraform {
-  required_version = "~> 0.13.2"
+  required_version = "> 0.13.2"
   required_providers {
     google = "~> 3.13"
   }
@@ -38,7 +38,8 @@ module "services" {
     "appengineflex.googleapis.com",
     "sqladmin.googleapis.com",
     "secretmanager.googleapis.com",
-    "iap.googleapis.com"
+    "iap.googleapis.com",
+    "cloudbuild.googleapis.com"
   ]
 }
 

@@ -1,17 +1,18 @@
 pre-requesites:
 	source vars_base && cd Iac/prerequesites && terraform init && terraform apply
+pre-requesites-cicd:
+	source vars_base && cd Iac/prerequesites && terraform init && terraform apply -auto-approve
 
-build-docker:
-	source vars_base && cd tracking_server && docker build -t $${TF_VAR_mlflow_docker_image} -f tracking.Dockerfile .
-
-push-docker:
-	source vars_base && docker push $${TF_VAR_mlflow_docker_image}
+docker:
+	source vars_base && gcloud builds submit --tag $${TF_VAR_mlflow_docker_image} ./tracking_server
 
 init-terraform:
-	source vars_base && cd Iac && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}"
+	source vars_base && cd Iac && rm -rf .terraform && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}"
 
 apply-terraform:
 	source vars_base && cd Iac && terraform apply
+apply-terraform-cicd:
+	source vars_base && cd Iac && terraform apply -auto-approve
 
 plan-terraform:
 	source vars_base && cd Iac && terraform plan
@@ -23,18 +24,20 @@ destroy-terraform:
 	source vars_base && cd Iac && terraform destroy
 
 apply: init-terraform import-terraform apply-terraform
+apply-cicd: init-terraform import-terraform apply-terraform-cicd
 
 plan: init-terraform plan-terraform
 
 destroy: init-terraform destroy-terraform
 
-docker: build-docker push-docker
-
 init: pre-requesites
+init-cicd: pre-requesites-cicd
 
 deploy: docker apply
+deploy-cicd: docker apply-cicd
 
 one-click-mlflow: init deploy
+one-click-mlflow-cicd: init-cicd deploy-cicd
 
-.PHONY: pre-requesites build-docker push-docker init-terraform apply-terraform plan-terraform import-terraform destroy-terraform
-.PHONY: apply plan destroy docker init deploy one-click-mlflow
+.PHONY: pre-requesites pre-requesites-cicd docker init-terraform apply-terraform apply-terraform-cicd plan-terraform import-terraform destroy-terraform
+.PHONY: apply apply-cicd plan destroy docker init init-cicd deploy deploy-cicd one-click-mlflow one-click-mlflow-cicd
