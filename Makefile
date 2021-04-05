@@ -20,6 +20,9 @@ plan-terraform:
 import-terraform:
 	source vars_base && cd Iac && ./../bin/terraform_import.sh
 
+gae-check:
+	source vars_base && cd Iac && ./../bin/app_engine_check.sh
+
 destroy-terraform:
 	source vars_base && cd Iac && terraform destroy
 
