@@ -7,7 +7,8 @@ else
 fi
 
 if [[ "$DEPLOYED_VERSIONS" == *"mlflow-default"* ]] || [[ "$DEPLOYED_VERSIONS" == "" ]]; then
-  echo 1
+  echo "A dummy app engine with the name default will be created"
+  echo export TF_VAR_create_default_service=1 >> ../vars_additionnal
 else
-  echo 0
+  echo export TF_VAR_create_default_service=0 >> ../vars_additionnal
 fi
