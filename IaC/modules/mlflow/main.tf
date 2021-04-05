@@ -44,7 +44,8 @@ module "database" {
 
 module "server" {
   source                       = "./server"
-  service                      = var.mlflow_server
+  mlflow_server                = var.mlflow_server
+  create_default_service       = var.create_default_service
   location                     = var.server_location
   docker_image_name            = var.server_docker_image
   env_variables                = var.server_env_variables

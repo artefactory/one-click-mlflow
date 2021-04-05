@@ -31,4 +31,5 @@ resource "google_storage_bucket" "this" {
     }
   }
   uniform_bucket_level_access = var.storage_uniform
+  force_destroy = true
 }
