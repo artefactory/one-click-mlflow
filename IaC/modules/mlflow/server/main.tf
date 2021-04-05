@@ -75,8 +75,8 @@ resource "google_project_iam_member" "gae_api" {
 }
 
 resource "google_app_engine_flexible_app_version" "default_app" {
-  count = var.create_default_service ? 1 : 0
-  service = "default"
+  count      = var.create_default_service ? 1 : 0
+  service    = "default"
   version_id = "mlflow-default"
   runtime    = "custom"
 
@@ -95,7 +95,7 @@ resource "google_app_engine_flexible_app_version" "default_app" {
   }
 
   automatic_scaling {
-    cool_down_period = "120s"
+    cool_down_period    = "120s"
     min_total_instances = 1
     max_total_instances = 1
     cpu_utilization {
@@ -104,9 +104,9 @@ resource "google_app_engine_flexible_app_version" "default_app" {
   }
 
   delete_service_on_destroy = false
-  noop_on_destroy = true
+  noop_on_destroy           = true
 
-  depends_on      = [google_app_engine_application.app]
+  depends_on = [google_app_engine_application.app]
 }
 
 resource "google_app_engine_flexible_app_version" "mlflow_app" {
@@ -152,12 +152,12 @@ resource "google_app_engine_flexible_app_version" "mlflow_app" {
   }
 
   delete_service_on_destroy = true
-  noop_on_destroy = false
+  noop_on_destroy           = false
 
   timeouts {
     create = "20m"
   }
-  depends_on      = [
+  depends_on = [
     google_app_engine_flexible_app_version.default_app,
     google_project_iam_member.gcs,
     google_project_iam_member.gae_gcs,
@@ -168,13 +168,13 @@ resource "google_app_engine_flexible_app_version" "mlflow_app" {
 }
 
 resource "google_iap_brand" "project_brand" {
-  count = var.consent_screen_support_email == "" ? 0 : 1
+  count             = var.consent_screen_support_email == "" ? 0 : 1
   support_email     = var.consent_screen_support_email
   application_title = "mlflow"
   project           = data.google_project.project.number
 }
 resource "google_iap_client" "project_client" {
-  count = var.consent_screen_support_email == "" ? 0 : 1
+  count        = var.consent_screen_support_email == "" ? 0 : 1
   display_name = "mlflow"
   brand        = google_iap_brand.project_brand[0].name
 }

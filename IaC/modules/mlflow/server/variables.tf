@@ -25,7 +25,7 @@ variable "docker_image_name" {
   description = "Name of the docker image"
 }
 variable "env_variables" {
-  type        = map
+  type        = map(any)
   description = "Env variable to be used in your container"
 }
 variable "project_id" {
@@ -70,7 +70,7 @@ variable "web_app_users" {
 }
 variable "create_default_service" {
   description = "Whether or not to create a default app engine service"
-  type = bool
+  type        = bool
 }
 variable "mlflow_server" {
   description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."

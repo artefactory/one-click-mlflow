@@ -80,7 +80,7 @@ variable "db_name" {
 }
 variable "create_default_service" {
   description = "Whether or not to create a default app engine service"
-  type = bool
+  type        = bool
 }
 variable "mlflow_server" {
   description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."
@@ -97,7 +97,7 @@ variable "server_docker_image" {
 }
 variable "server_env_variables" {
   description = "Env variables used inside your container"
-  type        = map
+  type        = map(any)
   default     = {}
 }
 variable "project_id" {
