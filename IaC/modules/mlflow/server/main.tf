@@ -105,6 +105,8 @@ resource "google_app_engine_flexible_app_version" "default_app" {
 
   delete_service_on_destroy = false
   noop_on_destroy = true
+
+  depends_on      = [google_app_engine_application.app]
 }
 
 resource "google_app_engine_flexible_app_version" "mlflow_app" {
