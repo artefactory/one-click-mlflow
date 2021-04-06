@@ -30,8 +30,8 @@ setup-new-project:
 	rm -rf .terraform vars_additionnal && cd Iac && rm -rf .terraform && rm -rf .terraform.lock.hcl && rm -rf prerequesites/.terraform && rm -rf prerequesites/.terraform.lock.hcl && rm -rf prerequesites/terraform.tfstate && rm -rf prerequesites/terraform.tfstate.backup
 	source vars && gcloud config set project $${TF_VAR_project_id} && gcloud auth login && gcloud auth application-default login
 
-apply: init-terraform import-terraform gae-check apply-terraform
-apply-cicd: init-terraform import-terraform gae-check apply-terraform-cicd
+apply: init-terraform gae-check import-terraform apply-terraform
+apply-cicd: init-terraform gae-check import-terraform apply-terraform-cicd
 
 plan: init-terraform plan-terraform
 
