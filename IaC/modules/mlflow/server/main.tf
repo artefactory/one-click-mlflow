@@ -34,8 +34,8 @@ resource "google_app_engine_application" "app" {
   location_id = var.location
   iap {
     enabled              = true
-    oauth2_client_id     = var.oauth_client_id != "" ? var.oauth_client_id : google_iap_client.project_client[0].client_id
-    oauth2_client_secret = var.oauth_client_secret != "" ? var.oauth_client_secret : google_iap_client.project_client[0].secret
+    oauth2_client_id     = var.oauth_client_id == "" ? google_iap_client.project_client[0].client_id : var.oauth_client_id
+    oauth2_client_secret = var.oauth_client_secret == "" ? google_iap_client.project_client[0].secret : var.oauth_client_secret
   }
 }
 
@@ -173,8 +173,9 @@ resource "google_iap_brand" "project_brand" {
   application_title = "mlflow"
   project           = data.google_project.project.number
 }
+
 resource "google_iap_client" "project_client" {
-  count        = var.consent_screen_support_email == "" ? 0 : 1
+  count        = var.oauth_client_id == "" ? 1 : 0
   display_name = "mlflow"
   brand        = var.brand_exists == 1 ? var.brand_name : google_iap_brand.project_brand[0].name
 }
