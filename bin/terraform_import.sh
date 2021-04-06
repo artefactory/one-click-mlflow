@@ -13,14 +13,16 @@ fi
 
 
 if gcloud alpha iap oauth-brands list | grep "name: " 1> /dev/null 2> /dev/null; then
-  echo "A consent screen (brand) has already been configured on this project"
+  echo "A consent screen (brand) has already been configured on this project. It will be used as-is"
   export BRAND_EXISTS=1
+  echo export TF_VAR_brand_exists=1 >> ../vars_additionnal
   BRAND_NAME="projects/$TF_VAR_project_number/brands/$TF_VAR_project_number"
-  terraform import module.mlflow.module.server.google_iap_brand.project_brand $BRAND_NAME
+  echo export TF_VAR_brand_name=$BRAND_NAME >> ../vars_additionnal
 else
   echo "No consent screen (brand) has been configured on this project, a new one will be created"
   export BRAND_EXISTS=0
   echo "No oauth client exists on this project. A new one will be created"
+  echo export TF_VAR_brand_exists=0 >> ../vars_additionnal
   echo export TF_VAR_oauth_client_id="" >> ../vars_additionnal
   echo export TF_VAR_oauth_client_secret="" >> ../vars_additionnal
 fi
