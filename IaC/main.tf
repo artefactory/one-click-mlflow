@@ -55,6 +55,8 @@ module "mlflow" {
   create_default_service       = var.create_default_service == 1 ? true : false
   oauth_client_id              = var.oauth_client_id
   oauth_client_secret          = var.oauth_client_secret
+  brand_exists                 = var.brand_exists
+  brand_name                   = var.brand_name
 }
 
 module "log_pusher" {

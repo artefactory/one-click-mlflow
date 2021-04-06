@@ -64,6 +64,14 @@ variable "consent_screen_support_email" {
   type        = string
   description = "Person or group to contact in case of problem"
 }
+variable "brand_exists" {
+  type        = number
+  description = "1 if the brand exists 0 otherwise"
+}
+variable "brand_name" {
+  type        = string
+  description = "Name of the brand if it exists"
+}
 variable "web_app_users" {
   type        = list(string)
   description = "List of people who can acess the mlflow web app. e.g. [user:jane@example.com, group:people@example.com]"

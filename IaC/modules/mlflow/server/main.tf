@@ -168,7 +168,7 @@ resource "google_app_engine_flexible_app_version" "mlflow_app" {
 }
 
 resource "google_iap_brand" "project_brand" {
-  count             = var.consent_screen_support_email == "" ? 0 : 1
+  count             = var.brand_exists == 1 ? 0 : 1
   support_email     = var.consent_screen_support_email
   application_title = "mlflow"
   project           = data.google_project.project.number
@@ -176,7 +176,7 @@ resource "google_iap_brand" "project_brand" {
 resource "google_iap_client" "project_client" {
   count        = var.consent_screen_support_email == "" ? 0 : 1
   display_name = "mlflow"
-  brand        = google_iap_brand.project_brand[0].name
+  brand        = var.brand_exists == 1 ? var.brand_name : google_iap_brand.project_brand[0].name
 }
 
 resource "google_iap_app_engine_service_iam_member" "member" {
