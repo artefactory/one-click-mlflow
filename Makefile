@@ -20,11 +20,18 @@ plan-terraform:
 import-terraform:
 	source vars_base && cd Iac && ./../bin/terraform_import.sh
 
+gae-check:
+	source vars_base && cd Iac && ./../bin/app_engine_check.sh
+
 destroy-terraform:
 	source vars_base && cd Iac && terraform destroy
 
-apply: init-terraform import-terraform apply-terraform
-apply-cicd: init-terraform import-terraform apply-terraform-cicd
+setup-new-project:
+	rm -rf .terraform vars_additionnal && cd Iac && rm -rf .terraform && rm -rf .terraform.lock.hcl && rm -rf prerequesites/.terraform && rm -rf prerequesites/.terraform.lock.hcl && rm -rf prerequesites/terraform.tfstate && rm -rf prerequesites/terraform.tfstate.backup
+	source vars && gcloud config set project $${TF_VAR_project_id} && gcloud auth login && gcloud auth application-default login
+
+apply: init-terraform gae-check import-terraform apply-terraform
+apply-cicd: init-terraform gae-check import-terraform apply-terraform-cicd
 
 plan: init-terraform plan-terraform
 

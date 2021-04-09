@@ -30,10 +30,6 @@ Fill out the `vars` file.
 |`TF_VAR_web_app_users`|List of authorized users/groups/domains. Should be a single quoted list of string such as '["user:jane@example.com", "group:people@example.com", "domain:example.com"]'. Email addresses and domains must be associated with an active Google Account, G Suite account, or Cloud Identity account.|
 |`TF_VAR_network_name`|The network the application and backend should attach to. If left blank, a new network will be created. Hint: unless otherwise specified, a network named "default" will already exist on the project. To plug into this network, type TF_VAR_network_name=default into this variable.|
 |`TF_VAR_consent_screen_support_email`|Contact email address displayed by the SSO screen when the user trying to log in is not authorized. The address should be that of the user deploying mlflow (you) or a Cloud Identity group managed by this user. If you have already set-up your consent screen on the GCP project you can leave it blank|
-|`TF_VAR_oauth_client_id`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client id. Otherwise, leave it blank.|
-|`TF_VAR_oauth_client_secret`|If the consent screen is already set up on your project, you need to fill this value with the IAP Oauth client secret. Otherwise, leave it blank|
-
-You should either fill `TF_VAR_consent_screen_support_email` or (`TF_VAR_oauth_client_id` and `TF_VAR_oauth_client_secret`). Client id and client secret can be found on [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
 
 **Run `make one-click-mlflow` and follow the prompts.**
 

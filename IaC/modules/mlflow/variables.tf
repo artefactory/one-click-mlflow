@@ -78,8 +78,12 @@ variable "db_name" {
   type        = string
   default     = "mlflow"
 }
+variable "create_default_service" {
+  description = "Whether or not to create a default app engine service"
+  type        = bool
+}
 variable "mlflow_server" {
-  description = "Name of the mlflow server deployed to app engine."
+  description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."
   type        = string
 }
 variable "server_location" {
@@ -93,7 +97,7 @@ variable "server_docker_image" {
 }
 variable "server_env_variables" {
   description = "Env variables used inside your container"
-  type        = map
+  type        = map(any)
   default     = {}
 }
 variable "project_id" {
@@ -123,4 +127,12 @@ variable "oauth_client_id" {
 variable "oauth_client_secret" {
   type        = string
   description = "Oauth client secret, empty if consent screen not set up"
+}
+variable "brand_exists" {
+  type        = number
+  description = "1 if the brand exists 0 otherwise"
+}
+variable "brand_name" {
+  type        = string
+  description = "Name of the brand if it exists"
 }

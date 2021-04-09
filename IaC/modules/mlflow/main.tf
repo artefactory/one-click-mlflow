@@ -44,7 +44,8 @@ module "database" {
 
 module "server" {
   source                       = "./server"
-  service                      = var.mlflow_server
+  mlflow_server                = var.mlflow_server
+  create_default_service       = var.create_default_service
   location                     = var.server_location
   docker_image_name            = var.server_docker_image
   env_variables                = var.server_env_variables
@@ -61,4 +62,6 @@ module "server" {
   network_short_name           = var.network_short_name
   oauth_client_id              = var.oauth_client_id
   oauth_client_secret          = var.oauth_client_secret
+  brand_exists                 = var.brand_exists
+  brand_name                   = var.brand_name
 }

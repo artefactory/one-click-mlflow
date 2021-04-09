@@ -54,8 +54,8 @@ variable "mlflow_server" {
   type        = string
   default     = "mlflow"
 }
-variable "nb_app_engine_services" {
-  description = "Number of app engine services deployed. If 0, server name will be default"
+variable "create_default_service" {
+  description = "Whether or not to deploy a default AppEngine App"
   type        = number
 }
 variable "oauth_client_id" {
@@ -65,4 +65,13 @@ variable "oauth_client_id" {
 variable "oauth_client_secret" {
   type        = string
   description = "Oauth client secret, empty if consent screen not set up"
+}
+variable "brand_exists" {
+  type        = number
+  description = "1 if the brand exists 0 otherwise"
+}
+variable "brand_name" {
+  type        = string
+  default     = ""
+  description = "Name of the brand if it exists"
 }
