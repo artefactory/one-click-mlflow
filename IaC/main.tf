@@ -55,12 +55,14 @@ module "mlflow" {
   create_default_service       = var.create_default_service == 1 ? true : false
   oauth_client_id              = var.oauth_client_id
   oauth_client_secret          = var.oauth_client_secret
-  brand_exists                 = var.brand_exists
+  create_brand                 = var.create_brand
   brand_name                   = var.brand_name
 }
 
 module "log_pusher" {
-  source     = "./modules/mlflow/log_pusher"
-  project_id = var.project_id
-  depends_on = [module.mlflow]
+  source           = "./modules/mlflow/log_pusher"
+  app_id           = module.mlflow.app_id
+  mlflow_service   = module.mlflow.mlflow_service
+  artifacts_bucket = module.mlflow.artifacts_bucket_name
+  project_id       = var.project_id
 }

@@ -19,3 +19,8 @@ output "url" {
   description = "gcs uri"
   value       = google_storage_bucket.this.url
 }
+
+output "name" {
+  description = "gcs bucket name"
+  value       = google_storage_bucket.this.name
+}
