@@ -18,7 +18,12 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 - Initialized gcloud SDK with your owner account
 
 ### 1.1.2. Deploying
+
+Clone the repo
+
 Run `make one-click-mlflow` and let the wizard guide you.
+
+If you want to see the innards, you can run it in debug mode: `DEBUG=true make one-click-mlflow`
 
 
 ### 1.1.3. What it does
