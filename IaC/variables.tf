@@ -66,9 +66,9 @@ variable "oauth_client_secret" {
   type        = string
   description = "Oauth client secret, empty if consent screen not set up"
 }
-variable "brand_exists" {
+variable "create_brand" {
   type        = number
-  description = "1 if the brand exists 0 otherwise"
+  description = "1 if the brand needs to be created 0 otherwise"
 }
 variable "brand_name" {
   type        = string
