@@ -38,7 +38,7 @@ resource "google_compute_firewall" "allow-internal" {
     ports    = ["0-65535"]
   }
 
-  # Default internal range where our priveta network subnetworks are deployed.
+  # Default internal range where our private network subnetworks are deployed.
   # c.f. https://www.terraform.io/docs/providers/google/r/compute_network.html#auto_create_subnetworks
   source_ranges = ["10.128.0.0/9"]
 }
