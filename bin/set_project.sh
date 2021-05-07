@@ -18,7 +18,7 @@ done
 MAX_CHOICE=$((counter - 1))
 read -p 'Please enter your numeric choice: ' NUMERIC_CHOICE
 
-while (( NUMERIC_CHOICE < 1 )) || (( NUMERIC_CHOICE > MAX_CHOICE ))
+while echo "$NUMERIC_CHOICE" | grep -vqE "^\-?[0-9]+$" || (( NUMERIC_CHOICE < 1 )) || (( NUMERIC_CHOICE > MAX_CHOICE ))
 do
   read -p "Please enter a value between 1 and $MAX_CHOICE: " NUMERIC_CHOICE
 done
