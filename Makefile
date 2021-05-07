@@ -118,6 +118,7 @@ dependencies-checks:
 .PHONY: goodbye
 goodbye:
 	@echo "\nCongratulations, you successfully deployed MLFlow on your project !"
+	@source vars && echo "The web app is available at https://mlflow-dot-$${TF_VAR_project_id}.ew.r.appspot.com"
 	@echo "To push your first experiment, take a look at the bottom of the readme for an example."
 
 
