@@ -28,6 +28,7 @@ echo
 PROJECT_ID="$(echo "$PROJECT_LIST" | jq -r --argjson NUMERIC_CHOICE "$(( NUMERIC_CHOICE - 1 ))" '.[$NUMERIC_CHOICE].projectId')"
 PROJECT_NUMBER=$(gcloud --format json projects describe "$PROJECT_ID" | jq '.["projectNumber"]' | tr -d '"')
 
+gcloud config set project "$PROJECT_ID"
 ./save_var.sh TF_VAR_project_id "$PROJECT_ID"
 ./save_var.sh TF_VAR_project_number "$PROJECT_NUMBER"
 ./save_var.sh TF_VAR_backend_bucket "$PROJECT_ID-$PROJECT_NUMBER-ocmlf-state"
