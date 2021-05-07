@@ -37,6 +37,18 @@ do
     read -p "${PROMPTS[$NUMERIC_CHOICE]}: " TO_ADD
     WEB_APP_USERS[${#WEB_APP_USERS[@]}]=\"${GRANT_TYPES[$NUMERIC_CHOICE]}:$TO_ADD\"
     echo
+  else
+    if [[ "$WEB_APP_USERS" == "" ]];
+    then
+      read -p "No user will have access to the web app. Are you sure ? (y/N) " USER_IS_SURE
+      USER_IS_SURE=${USER_IS_SURE:-n}
+      USER_IS_SURE=$(echo "$USER_IS_SURE" | tr '[:upper:]' '[:lower:]')
+      if [[ $USER_IS_SURE != "y" ]];
+      then
+        SELECTED=""
+        echo
+      fi
+    fi
   fi
 done
 
