@@ -107,7 +107,7 @@ docker:
 
 .PHONY: welcome
 welcome:
-	@echo "\nWelcome to the GCP Mlflow deployment helper !"
+	@echo "\nWelcome to the GCP Mlflow deployment helper!"
 	@echo "If everything goes according to plan, you should have an up and running secure MLFlow install on your project in about 30 minutes\n"
 
 .PHONY: dependencies-checks
@@ -117,7 +117,7 @@ dependencies-checks:
 
 .PHONY: goodbye
 goodbye:
-	@echo "\nCongratulations, you successfully deployed MLFlow on your project !"
+	@echo "\nCongratulations, you successfully deployed MLFlow on your project!"
 	@source vars && echo "The web app is available at https://mlflow-dot-$${TF_VAR_project_id}.ew.r.appspot.com"
 	@echo "To push your first experiment, take a look at the bottom of the readme for an example."
 
