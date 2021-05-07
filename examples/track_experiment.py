@@ -13,6 +13,6 @@ for k in range(6):
     mlflow.log_metric("foo", 2**k)
 
 # Log an artifact (output file)
-mlflow.log_artifact(Path(__file__).parent / "artifact.csv")
+mlflow.log_artifact(str(Path(__file__).parent / "artifact.csv"))
 
 print("Sucessfully pushed logs, metrics, and artifacts")
