@@ -14,7 +14,7 @@ A tool to deploy a mostly serverless MLflow on a GCP project with one command
 
 ### 1.1.1. Pre-requisites
 - A GCP project on which you are owner
-- Terraform and jq installed
+- Terraform, make, and jq installed
 - Initialized gcloud SDK with your owner account
 
 ### 1.1.2. Deploying
