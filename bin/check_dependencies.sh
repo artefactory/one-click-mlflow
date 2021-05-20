@@ -22,4 +22,10 @@ then
   echo "It seems you do not have 'make' installed. Install it and make sure it's in your path then try again."
 fi
 
+if ! gcloud -v 1>/dev/null;
+then
+  CODE=1
+  echo "It seems you do not have 'gcloud' installed. Install it and make sure it's in your path then try again."
+fi
+
 exit "$CODE"
