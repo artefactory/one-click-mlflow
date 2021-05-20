@@ -36,6 +36,7 @@ do
   then
     read -p "${PROMPTS[$NUMERIC_CHOICE]}: " TO_ADD
     WEB_APP_USERS[${#WEB_APP_USERS[@]}]=\"${GRANT_TYPES[$NUMERIC_CHOICE]}:$TO_ADD\"
+    echo [${WEB_APP_USERS[*]}]
     echo
   else
     if [[ "$WEB_APP_USERS" == "" ]];
@@ -53,6 +54,7 @@ do
 
 done
 
-IFS=',';WEB_APP_USERS=\'[${WEB_APP_USERS[*]}]\';IFS=$' \t\n'
+WEB_APP_USERS=$( IFS=$','; echo "${WEB_APP_USERS[*]}" )
+WEB_APP_USERS=\'["$WEB_APP_USERS"]\'
 
 ./save_var.sh TF_VAR_web_app_users $WEB_APP_USERS
