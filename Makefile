@@ -1,3 +1,7 @@
+ifeq ($(SHELL),/bin/sh)
+	SHELL:=/bin/bash
+endif
+
 DEBUG ?= -
 ifeq (true,$(DEBUG))
   AUTO_APPROVE =
@@ -27,26 +31,26 @@ destroy: init-terraform destroy-terraform
 .PHONY: init-terraform
 init-terraform:
 	@echo "Initializing Terraform..."
-	@source vars && cd Iac && rm -rf .terraform && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}" $(OUTPUT_SUPPRESSOR)
+	@source vars && cd IaC && rm -rf .terraform && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}" $(OUTPUT_SUPPRESSOR)
 	@echo "Done\n"
 
 .PHONY: apply-terraform
 apply-terraform:
 	@echo "Deploying infrastructure..."
 	@echo "This should take about 20 minutes, don't forget to stretch and hydrate ☕️"
-	@source vars && cd Iac && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
+	@source vars && cd IaC && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
 	@echo "Done\n"
 
 .PHONY: destroy-terraform
 destroy-terraform:
 	@echo "Destroying deployed infrastructure..."
-	@source vars && cd Iac && terraform destroy $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
+	@source vars && cd IaC && terraform destroy $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
 	@echo "Done\n"
 
 .PHONY: pre-requisites
 pre-requisites: init-config set-project
 	@echo "Setting up your GCP project..."
-	@source vars && cd Iac/prerequesites && terraform init $(OUTPUT_SUPPRESSOR) && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
+	@source vars && cd IaC/prerequesites && terraform init $(OUTPUT_SUPPRESSOR) && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
 	@echo "Done\n"
 
 #################
@@ -127,5 +131,5 @@ goodbye:
 #################
 
 setup-new-project:
-	rm -rf .terraform vars vars.json && cd Iac && rm -rf .terraform .terraform.lock.hcl prerequesites/.terraform prerequesites/.terraform.lock.hcl prerequesites/terraform.tfstate prerequesites/terraform.tfstate.backup
+	rm -rf .terraform vars vars.json && cd IaC && rm -rf .terraform .terraform.lock.hcl prerequesites/.terraform prerequesites/.terraform.lock.hcl prerequesites/terraform.tfstate prerequesites/terraform.tfstate.backup
 	gcloud auth login && gcloud auth application-default login
