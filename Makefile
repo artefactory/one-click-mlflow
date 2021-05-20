@@ -32,26 +32,31 @@ destroy: init-terraform destroy-terraform
 init-terraform:
 	@echo "Initializing Terraform..."
 	@source vars && cd IaC && rm -rf .terraform && terraform init -backend-config="bucket=$${TF_VAR_backend_bucket}" $(OUTPUT_SUPPRESSOR)
-	@echo "Done\n"
+	@echo "Done"
+	@echo
+
 
 .PHONY: apply-terraform
 apply-terraform:
 	@echo "Deploying infrastructure..."
 	@echo "This should take about 20 minutes, don't forget to stretch and hydrate ☕️"
 	@source vars && cd IaC && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
-	@echo "Done\n"
+	@echo "Done"
+	@echo
 
 .PHONY: destroy-terraform
 destroy-terraform:
 	@echo "Destroying deployed infrastructure..."
 	@source vars && cd IaC && terraform destroy $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
-	@echo "Done\n"
+	@echo "Done"
+	@echo
 
 .PHONY: pre-requisites
 pre-requisites: init-config set-project
 	@echo "Setting up your GCP project..."
 	@source vars && cd IaC/prerequesites && terraform init $(OUTPUT_SUPPRESSOR) && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
-	@echo "Done\n"
+	@echo "Done"
+	@echo
 
 #################
 #    CONFIG     #
@@ -105,14 +110,18 @@ set-project:
 
 .PHONY: docker
 docker:
-	@echo "\nRemotely building mlflow server docker image"
+	@echo
+	@echo "Remotely building mlflow server docker image"
 	@source vars && gcloud builds submit --tag $${TF_VAR_mlflow_docker_image} ./tracking_server $(OUTPUT_SUPPRESSOR)
-	@echo "Done\n"
+	@echo "Done"
+	@echo
 
 .PHONY: welcome
 welcome:
-	@echo "\nWelcome to the GCP Mlflow deployment helper!"
-	@echo "If everything goes according to plan, you should have an up and running secure MLFlow install on your project in about 30 minutes\n"
+	@echo
+	@echo "Welcome to the GCP Mlflow deployment helper!"
+	@echo "If everything goes according to plan, you should have an up and running secure MLFlow install on your project in about 30 minutes"
+	@echo
 
 .PHONY: dependencies-checks
 dependencies-checks:
@@ -121,7 +130,8 @@ dependencies-checks:
 
 .PHONY: goodbye
 goodbye:
-	@echo "\nCongratulations, you successfully deployed MLFlow on your project! 🎉"
+	@echo
+	@echo "Congratulations, you successfully deployed MLFlow on your project! 🎉"
 	@source vars && echo "The web app is available at https://mlflow-dot-$${TF_VAR_project_id}.ew.r.appspot.com (You may have trouble connecting for a few minutes after the deployment, while IAP gets setup)"
 	@echo "To push your first experiment, take a look at the bottom of the readme for an example."
 
