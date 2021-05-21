@@ -1,0 +1,11 @@
+on: push
+name: Conftest
+jobs:
+  conftest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: test
+      uses: instrumenta/conftest-action@master
+      with:
+        files: tracking_server/Dockerfile

@@ -16,12 +16,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 variable "secret_id" {
-    type        = string
-    description = "Name of the secret you want to create"
-}
-variable "secret_value" {
-    type        = string
-    description = "value of the secret you want to create"
+  type        = string
+  description = "Name of the secret you want to create"
 }
 variable "module_depends_on" {
   type    = any

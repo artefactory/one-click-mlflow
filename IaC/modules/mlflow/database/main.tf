@@ -35,17 +35,18 @@ resource "google_sql_database_instance" "this_instance" {
     }
     availability_type = var.availability_type
   }
+  deletion_protection = false
 }
 
 resource "google_sql_database" "this_database" {
-  name     = var.database_name
-  instance = google_sql_database_instance.this_instance.name
+  name       = var.database_name
+  instance   = google_sql_database_instance.this_instance.name
   depends_on = [google_sql_database_instance.this_instance]
 }
 
 resource "google_sql_user" "this_user" {
-  name     = var.username
-  instance = google_sql_database_instance.this_instance.name
-  password = var.password
+  name       = var.username
+  instance   = google_sql_database_instance.this_instance.name
+  password   = var.password
   depends_on = [google_sql_database_instance.this_instance]
 }

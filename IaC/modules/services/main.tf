@@ -16,8 +16,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 resource "google_project_service" "project" {
-  count = length(var.services)
-  project = var.project_id
-  service = var.services[count.index]
+  count                      = length(var.services)
+  project                    = var.project_id
+  service                    = var.services[count.index]
   disable_dependent_services = false
 }
