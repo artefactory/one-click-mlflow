@@ -19,6 +19,7 @@ def get_token():
         print("You do not seem to have an mlflow-log-pusher service account key locally.")
         prompt = input("Get one ? (Y/n): ") or "y"
         if prompt.lower() == "y":
+            print("Fetching SA key...")
             fetch_sa_key()
         token = _get_token()
     return token

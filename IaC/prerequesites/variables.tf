@@ -16,11 +16,11 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 variable "project_id" {
-  description = "GCP project"
+  description = "GCP project name"
   type        = string
 }
 variable "backend_bucket" {
-  description = "Name of the bucket."
+  description = "Name of the terraform backend"
   type        = string
 }
 variable "backend_bucket_location" {
