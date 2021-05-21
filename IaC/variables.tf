@@ -24,10 +24,6 @@ variable "artifacts_bucket" {
   type        = string
   default     = "oneclick-mlflow-store"
 }
-variable "db_password_value" {
-  description = "Database password to connect to your instance"
-  type        = string
-}
 variable "mlflow_docker_image" {
   description = "Docker image used in container registry"
   type        = string

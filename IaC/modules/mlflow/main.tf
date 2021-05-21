@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 module "artifacts" {
   source            = "./artifacts"
   bucket_name       = var.artifacts_bucket_name
@@ -26,7 +27,6 @@ module "artifacts" {
 module "db_secret" {
   source       = "./secret_manager"
   secret_id    = var.db_password_name
-  secret_value = var.db_password_value
 }
 
 module "database" {

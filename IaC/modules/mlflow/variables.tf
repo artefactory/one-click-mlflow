@@ -39,10 +39,6 @@ variable "db_password_name" {
   type        = string
   default     = "mlflow-db-pwd"
 }
-variable "db_password_value" {
-  description = "Value of the database password stored in secret manager"
-  type        = string
-}
 variable "db_username" {
   description = "Value of the database username"
   type        = string

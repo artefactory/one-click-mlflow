@@ -15,6 +15,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+resource "random_password" "password" {
+  length = 16
+}
+
 resource "google_secret_manager_secret" "secret" {
   provider = google-beta
 
@@ -25,12 +30,11 @@ resource "google_secret_manager_secret" "secret" {
   }
 }
 
-
 resource "google_secret_manager_secret_version" "secret-version" {
   provider = google-beta
 
   secret = google_secret_manager_secret.secret.id
 
-  secret_data = var.secret_value
+  secret_data = random_password.password.result
   depends_on  = [google_secret_manager_secret.secret]
 }
