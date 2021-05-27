@@ -34,6 +34,8 @@ If you want to see the innards, you can run it in debug mode: `DEBUG=true make o
 - Manages all the network magic
 - Creates the `mlflow-log-pusher` service account
 
+![Architecture](/doc/archi.svg)
+
 ### 1.1.4. Other available make commands
 - `make deploy`: builds and pushes the application image and (re)deploys the infrastructure
 - `make docker`: builds and pushes the application image
