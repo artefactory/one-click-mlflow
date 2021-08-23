@@ -20,7 +20,7 @@ FROM google/cloud-sdk:332.0.0
 WORKDIR /mlflow/
 
 RUN mkdir -p /mlflow/ \
-  && apt-get update \
+  && apt-get update --allow-releaseinfo-change\
   && apt-get -y install --no-install-recommends apt-transport-https \
   ca-certificates gnupg default-libmysqlclient-dev libpq-dev build-essential curl
 
