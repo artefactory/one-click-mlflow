@@ -18,6 +18,7 @@
 
 resource "random_password" "password" {
   length = 16
+  special = false
 }
 
 resource "google_secret_manager_secret" "secret" {
