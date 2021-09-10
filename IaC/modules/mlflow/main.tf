@@ -19,7 +19,7 @@
 module "artifacts" {
   source            = "./artifacts"
   bucket_name       = var.artifacts_bucket_name
-  bucket_location   = var.artifacts_bucket_location
+  bucket_location   = var.location
   number_of_version = var.artifacts_number_of_version
   storage_class     = var.artifacts_storage_class
 }
@@ -33,7 +33,7 @@ module "database" {
   source            = "./database"
   instance_prefix   = var.db_instance_prefix
   database_version  = var.db_version
-  region            = var.db_region
+  region            = var.location
   size              = var.db_size
   availability_type = var.db_availability_type
   database_name     = var.db_name
@@ -46,7 +46,7 @@ module "server" {
   source                       = "./server"
   mlflow_server                = var.mlflow_server
   create_default_service       = var.create_default_service
-  location                     = var.server_location
+  app_engine_location          = var.app_engine_location
   docker_image_name            = var.server_docker_image
   env_variables                = var.server_env_variables
   db_private_ip                = module.database.private_ip

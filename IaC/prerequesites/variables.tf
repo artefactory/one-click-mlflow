@@ -23,10 +23,9 @@ variable "backend_bucket" {
   description = "Name of the terraform backend"
   type        = string
 }
-variable "backend_bucket_location" {
-  description = "Location of the bucket."
+variable "location" {
+  description = "Location of the backend bucket."
   type        = string
-  default     = "EUROPE-WEST1"
 }
 variable "versioning_enabled" {
   description = "True if you want to version your bucket."
