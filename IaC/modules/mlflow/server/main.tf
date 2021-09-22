@@ -74,27 +74,41 @@ resource "google_project_iam_member" "gae_api" {
   member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
+resource "google_storage_bucket" "default_app_bucket" {
+  name = "${data.google_project.project.project_id}-default-app-deployment"
+}
+
+resource "google_storage_bucket_object" "default_app_archive" {
+  name = "app.zip"
+  bucket = google_storage_bucket.default_app_bucket.name
+  source = "./modules/mlflow/server/default_app_files/app.zip"
+
+  depends_on = [google_storage_bucket.default_app_bucket]
+}
+
 resource "google_app_engine_standard_app_version" "default_app" {
   count      = var.create_default_service ? 1 : 0
   service    = "default"
   version_id = "mlflow-default"
-  runtime    = "custom"
+  runtime    = "python39"
 
   deployment {
     zip {
-      source_url = "https://github.com/octocat/Hello-World/archive/refs/heads/master.zip"
+      source_url = "https://storage.googleapis.com/${google_storage_bucket.default_app_bucket.name}/${google_storage_bucket_object.default_app_archive.name}"
     }
   }
 
   automatic_scaling {
-    min_total_instances = 0
-    max_total_instances = 1
+    max_idle_instances = 1
   }
 
   delete_service_on_destroy = false
   noop_on_destroy           = true
 
-  depends_on = [google_app_engine_application.app]
+  depends_on = [
+    google_app_engine_application.app,
+    google_storage_bucket_object.default_app_archive
+  ]
 }
 
 resource "google_app_engine_flexible_app_version" "mlflow_app" {
