@@ -78,12 +78,23 @@ resource "google_storage_bucket" "default_app_bucket" {
   name = "${data.google_project.project.project_id}-default-app-deployment"
 }
 
+data "archive_file" "default_app_files" {
+  type        = "zip"
+  output_path = "./modules/mlflow/server/default_app_files/app.zip"
+
+  source_dir = "./modules/mlflow/server/default_app_files/"
+  excludes    = [ "./modules/mlflow/server/default_app_files/app.zip" ]
+}
+
 resource "google_storage_bucket_object" "default_app_archive" {
   name = "app.zip"
   bucket = google_storage_bucket.default_app_bucket.name
   source = "./modules/mlflow/server/default_app_files/app.zip"
 
-  depends_on = [google_storage_bucket.default_app_bucket]
+  depends_on = [
+    google_storage_bucket.default_app_bucket,
+    data.archive_file.default_app_files
+  ]
 }
 
 resource "google_app_engine_standard_app_version" "default_app" {
