@@ -75,8 +75,11 @@ resource "google_project_iam_member" "gae_api" {
 }
 
 resource "google_storage_bucket" "default_app_bucket" {
+  # bucket to have a zip file for building default app engine
   name = "${data.google_project.project.project_id}-default-app-deployment"
+  # force destroy even when there is an object inside
   force_destroy = true
+  # lifecycle rule of deleting objects after 1 day to do not keep the build objects
   lifecycle_rule {
     action {
       type = "Delete"
@@ -88,6 +91,7 @@ resource "google_storage_bucket" "default_app_bucket" {
 }
 
 data "archive_file" "default_app_files" {
+  # to build an archive from files in ./default_app_files
   type        = "zip"
   output_path = "./modules/mlflow/server/default_app_files/app.zip"
 
