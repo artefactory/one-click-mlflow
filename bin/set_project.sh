@@ -1,5 +1,9 @@
 #!/bin/bash
 
+contains() {
+    [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]] && exit(0) || exit(1)
+}
+
 set -e
 
 echo
@@ -16,16 +20,20 @@ do
 done
 
 MAX_CHOICE=$((counter - 1))
-read -p 'Please enter your numeric choice: ' NUMERIC_CHOICE
+read -p 'Please enter your numeric choice: ' CHOICE
 
-while echo "$NUMERIC_CHOICE" | grep -vqE "^\-?[0-9]+$" || (( NUMERIC_CHOICE < 1 )) || (( NUMERIC_CHOICE > MAX_CHOICE ))
+while ! contains $PROJECT_IDS $CHOICE || echo "$CHOICE" | grep -vqE "^\-?[0-9]+$" || (( CHOICE < 1 )) || (( CHOICE > MAX_CHOICE ))
 do
-  read -p "Please enter a value between 1 and $MAX_CHOICE: " NUMERIC_CHOICE
+  read -p "Please enter a value between 1 and $MAX_CHOICE or the project id: " CHOICE
 done
 echo
 
+if contains $PROJECT_IDS $CHOICE; then
+  PROJECT_ID=$CHOICE
+else
+  PROJECT_ID="$(echo "$PROJECT_LIST" | jq -r --argjson CHOICE "$(( CHOICE - 1 ))" '.[$CHOICE].projectId')"
+fi
 
-PROJECT_ID="$(echo "$PROJECT_LIST" | jq -r --argjson NUMERIC_CHOICE "$(( NUMERIC_CHOICE - 1 ))" '.[$NUMERIC_CHOICE].projectId')"
 PROJECT_NUMBER=$(gcloud --format json projects describe "$PROJECT_ID" | jq '.["projectNumber"]' | tr -d '"')
 
 gcloud config set project "$PROJECT_ID"
