@@ -28,6 +28,10 @@ destroy: init-terraform destroy-terraform
 #   TERRAFORM   #
 #################
 
+.PHONY: validate-terraform
+terraform:
+	@cd IaC & rm -rf .terraform & terraform init -backend=false & terraform validate
+
 .PHONY: init-terraform
 init-terraform:
 	@echo "Initializing Terraform..."
