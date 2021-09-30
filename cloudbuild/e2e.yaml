@@ -3,7 +3,6 @@ steps:
   id: End-To-End test
   env:
     - 'PROJECT_ID=${_PROJECT_ID}'
-    - 'PROJECT_NUMBER=${_PROJECT_NUMBER}'
   entrypoint: 'bash'
   args:
     - -c
@@ -12,6 +11,6 @@ steps:
         CI_PROJECT_ID=ocmlf-github-ci-$(uuidgen)
         gcloud projects create $CI_PROJECT_ID --name=ocmlf-github-ci
         make validate-terraform && \
-        echo -e "${CI_PROJECT_ID}\1\4" | make one-click-mlflow && \
+        echo -e "${CI_PROJECT_ID}\1\\4\y" | make one-click-mlflow && \
         make destroy && \
         gcp projects delete $CI_PROJECT_ID
