@@ -76,6 +76,15 @@ resource "google_project_iam_member" "gae_api" {
 
 resource "google_storage_bucket" "default_app_bucket" {
   name = "${data.google_project.project.project_id}-default-app-deployment"
+  force_destroy = true
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      age = 1
+    }
+  }
 }
 
 data "archive_file" "default_app_files" {
