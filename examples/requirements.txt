@@ -47,7 +47,7 @@ rsa==4.7.2
 six==1.16.0
 smmap==4.0.0
 SQLAlchemy==1.4.13
-sqlparse==0.4.1
+sqlparse==0.4.2
 tabulate==0.8.9
 typing-extensions==3.10.0.0
 urllib3==1.26.5
