@@ -11,6 +11,7 @@ import requests
 
 
 def get_token():
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = ""
     if "mlflow-log-pusher-key.json" in os.listdir(Path(__file__).parent):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(Path(__file__).parent / "mlflow-log-pusher-key.json")
     try:
