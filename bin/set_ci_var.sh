@@ -14,7 +14,7 @@ add_to_json TF_VAR_folder_id "$1"
 add_to_json TF_VAR_billing_account "$2"
 add_to_json TF_VAR_birth_project_number "$3"
 
-rm -rf ../vars
+rm -rf ../cloudbuild/IaC/vars
 VARS=$(jq -r '. | to_entries | .[] | .key + "=" + (.value|tostring)' ../cloudbuild/IaC/vars.json)
 
 for VAR in $VARS
