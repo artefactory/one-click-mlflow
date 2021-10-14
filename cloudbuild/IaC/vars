@@ -1,0 +1,8 @@
+export TF_VAR_project_id=one-click-mlflow-ci-h
+export TF_VAR_folder_id=1
+export TF_VAR_billing_account=2
+export TF_VAR_birth_project_number=3
+export TF_VAR_project_id=one-click-mlflow-ci-ckPs8kkLMxoFu
+export TF_VAR_folder_id=1
+export TF_VAR_billing_account=2
+export TF_VAR_birth_project_number=3
