@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-variable "location" {
+variable "app_engine_location" {
   type        = string
   description = "Location to deploy your server"
-  default     = "europe-west"
 }
 variable "docker_image_name" {
   type        = string

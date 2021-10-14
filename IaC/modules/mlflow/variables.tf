@@ -19,10 +19,9 @@ variable "artifacts_bucket_name" {
   description = "Name of the mlflow bucket created to store artifacts"
   type        = string
 }
-variable "artifacts_bucket_location" {
-  description = "Location of the mlflow artifact bucket deployed"
+variable "location" {
+  description = "mlflow artifact bucket and data base location"
   type        = string
-  default     = "EUROPE-WEST1"
 }
 variable "artifacts_number_of_version" {
   description = "Number of file version kept in your artifacts bucket"
@@ -54,11 +53,6 @@ variable "db_version" {
   type        = string
   default     = "MYSQL_5_7"
 }
-variable "db_region" {
-  description = "Database region"
-  type        = string
-  default     = "europe-west1"
-}
 variable "db_size" {
   description = "Database instance size"
   type        = string
@@ -82,10 +76,9 @@ variable "mlflow_server" {
   description = "Name of the mlflow server deployed to app engine. If a service already have this name, it will be overwritten."
   type        = string
 }
-variable "server_location" {
-  description = "Location to deploy cloud run server"
+variable "app_engine_location" {
+  description = "Location to deploy app engine server"
   type        = string
-  default     = "europe-west"
 }
 variable "server_docker_image" {
   description = "Docker image name of your mlflow server"

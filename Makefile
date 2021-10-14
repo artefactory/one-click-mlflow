@@ -52,7 +52,7 @@ destroy-terraform:
 	@echo
 
 .PHONY: pre-requisites
-pre-requisites: init-config set-project
+pre-requisites: init-config set-project set-location
 	@echo "Setting up your GCP project..."
 	@source vars && cd IaC/prerequesites && terraform init $(OUTPUT_SUPPRESSOR) && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)
 	@echo "Done"
@@ -103,6 +103,15 @@ set-project:
 	@chmod +x ./bin/set_project.sh
 	@cd bin && ./set_project.sh
 
+.PHONY: set-location
+set-location:
+	@chmod +x ./bin/set_location.sh
+	@cd bin && ./set_location.sh
+
+.PHONY: get-uri
+get-uri:
+	@chmod +x ./bin/get-uri.sh
+	@cd bin && ./get-uri.sh
 
 #################
 #     MISC      #
@@ -129,10 +138,10 @@ dependencies-checks:
 	@cd bin && ./check_dependencies.sh
 
 .PHONY: goodbye
-goodbye:
+goodbye: get-uri
 	@echo
 	@echo "Congratulations, you successfully deployed MLFlow on your project! 🎉"
-	@source vars && echo "The web app is available at https://mlflow-dot-$${TF_VAR_project_id}.ew.r.appspot.com (You may have trouble connecting for a few minutes after the deployment, while IAP gets setup)"
+	@source vars && echo "The web app is available at https://mlflow-dot-$${APP_DEFAULT_URI} (You may have trouble connecting for a few minutes after the deployment, while IAP gets setup)"
 	@echo "To push your first experiment, take a look at the bottom of the readme for an example."
 
 

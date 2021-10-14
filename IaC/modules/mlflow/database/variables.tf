@@ -28,7 +28,6 @@ variable "database_version" {
 variable "region" {
   type        = string
   description = "Region of the database instance"
-  default     = "europe-west1"
 }
 variable "size" {
   type        = string

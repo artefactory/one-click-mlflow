@@ -71,3 +71,11 @@ variable "brand_name" {
   default     = ""
   description = "Name of the brand if it exists"
 }
+variable "app_engine_location" {
+  description = "Location to deploy app engine server"
+  type        = string
+}
+variable "location" {
+  description = "mlflow artifact bucket and data base location"
+  type        = string
+}

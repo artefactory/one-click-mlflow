@@ -31,7 +31,7 @@ data "google_project" "project" {
 }
 
 resource "google_app_engine_application" "app" {
-  location_id = var.location
+  location_id = var.app_engine_location
   iap {
     enabled              = true
     oauth2_client_id     = var.oauth_client_id == "" ? google_iap_client.project_client[0].client_id : var.oauth_client_id

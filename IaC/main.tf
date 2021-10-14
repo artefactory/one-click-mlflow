@@ -56,6 +56,8 @@ module "mlflow" {
   oauth_client_secret          = var.oauth_client_secret
   create_brand                 = var.create_brand
   brand_name                   = var.brand_name
+  location                     = var.location
+  app_engine_location          = var.app_engine_location
 }
 
 module "log_pusher" {
