@@ -4,9 +4,9 @@ steps:
   env:
     - 'PROJECT_NUMBER=$PROJECT_NUMBER'
     - 'BILLING_ACCOUNT=${_BILLING_ACCOUNT}'
-    - 'TEST=${_FOLDER_ID}'
+    - 'FOLDER_ID=${_FOLDER_ID}'
   entrypoint: 'bash'
   args:
     - -c
     - |
-        birth_project_number=$PROJECT_NUMBER make ci-one-click-mlflow
+        make ci-one-click-mlflow
