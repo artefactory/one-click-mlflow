@@ -1,10 +1,10 @@
 steps:
-- name: 'eu.gcr.io/${_PROJECT_ID}/ocmlf-builderterraformgcloud:1.0.0'
+- name: 'eu.gcr.io/${PROJECT_ID}/ocmlf-builderterraformgcloud:1.0.0'
   id: End-To-End test
   env:
     - 'FOLDER_ID=${_FOLDER_ID}'
     - 'BILLING_ACCOUNT=${_BILLING_ACCOUNT}'
-    - 'PROJECT_NUMBER=${_PROJECT_NUMBER}'
+    - 'PROJECT_NUMBER=$PROJECT_NUMBER'
   entrypoint: 'bash'
   args:
     - -c
