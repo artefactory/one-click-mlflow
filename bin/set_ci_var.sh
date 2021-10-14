@@ -7,7 +7,7 @@ add_to_json() {
 set -e
 export LC_CTYPE=C
 
-SALT=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')
+SALT=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 10 ; echo '')
 
 add_to_json TF_VAR_project_id "one-click-mlflow-ci-$SALT"
 add_to_json TF_VAR_folder_id "$1"
