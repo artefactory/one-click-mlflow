@@ -173,7 +173,7 @@ ci-track-experiment:
 	@source vars && cd ./examples/ && pip install -r requirements.txt && python track_experiment.py -auto-approve $$TF_VAR_project_id
 
 .PHONY: ci-variables
-ci-variables:
+ci-variables: init-config
 	@chmod +x ./bin/set_ci_var.sh
 	@echo {} > cloudbuild/IaC/vars.json
 	@cd bin && ./set_ci_var.sh $$FOLDER_ID $$BILLING_ACCOUNT $$PROJECT_NUMBER
