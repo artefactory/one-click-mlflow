@@ -5,6 +5,7 @@ steps:
     - 'PROJECT_NUMBER=$PROJECT_NUMBER'
     - 'BILLING_ACCOUNT=${_BILLING_ACCOUNT}'
     - 'FOLDER_ID=${_FOLDER_ID}'
+    - 'PROJECT_LABELS=${_PROJECT_LABELS}'
   entrypoint: 'bash'
   args:
     - -c

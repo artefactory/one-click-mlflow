@@ -13,3 +13,7 @@ variable "billing_account" {
 variable "birth_project_number" {
   description="Project number of the project deploying the IaC"
 }
+
+variable "project_labels" {
+  description="Project labels to describe the new project in GCP"
+}
