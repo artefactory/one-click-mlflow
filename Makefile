@@ -176,9 +176,7 @@ ci-track-experiment:
 ci-variables: init-config
 	@chmod +x ./bin/set_ci_var.sh
 	@echo {} > cloudbuild/IaC/vars.json
-	@echo $$PROJECT_LABELS
 	@cd bin && ./set_ci_var.sh $$FOLDER_ID $$BILLING_ACCOUNT $$PROJECT_NUMBER $$PROJECT_LABELS $$PROJECT_OWNER
-	@cd cloudbuild/IaC && cat vars.json && cat vars
 
 #################
 #   DEVTOOLS    #
