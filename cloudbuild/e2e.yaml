@@ -6,8 +6,12 @@ steps:
     - 'BILLING_ACCOUNT=${_BILLING_ACCOUNT}'
     - 'FOLDER_ID=${_FOLDER_ID}'
     - 'PROJECT_LABELS=${_PROJECT_LABELS}'
+    - 'PROJECT_OWNER=${_PROJECT_OWNER}'
   entrypoint: 'bash'
   args:
     - -c
     - |
-        make ci-one-click-mlflow
+        if ! make ci-one-click-mlflow ; then
+          make ci-terraform-destroy
+          exit 1
+        fi

@@ -17,3 +17,7 @@ variable "birth_project_number" {
 variable "project_labels" {
   description="Project labels to describe the new project in GCP"
 }
+
+variable "project_owner" {
+  description="Owner of the newly created project"
+}

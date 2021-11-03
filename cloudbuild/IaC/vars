@@ -3,3 +3,4 @@ export TF_VAR_folder_id=
 export TF_VAR_billing_account=
 export TF_VAR_birth_project_number=
 export TF_VAR_project_labels=
+export TF_VAR_project_owner=
