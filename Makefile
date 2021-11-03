@@ -151,7 +151,7 @@ ci-one-click-mlflow: ci-create-project ci-config ci-deploy-and-test ci-terraform
 ci-create-project: ci-variables ci-terraform-init ci-terraform-apply
 
 .PHONY: ci-deploy-and-test
-ci-deploy-and-test: validate-terraform pre-requisites deploy ci-track-experiment
+ci-deploy-and-test: validate-terraform deploy ci-track-experiment
 
 .PHONY: ci-config
 ci-config: set_app_engine set-various
