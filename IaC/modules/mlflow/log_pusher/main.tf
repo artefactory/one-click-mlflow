@@ -30,7 +30,6 @@ resource "google_iap_app_engine_service_iam_member" "log_pusher_iap" {
 }
 
 resource "google_storage_bucket_iam_member" "log_pusher_storage" {
-  project = var.project_id
   bucket  = var.artifacts_bucket
   role    = "roles/storage.objectAdmin"
   member  = "serviceAccount:${google_service_account.log_pusher.email}"
