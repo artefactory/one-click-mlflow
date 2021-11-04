@@ -154,7 +154,7 @@ ci-create-project: ci-variables ci-terraform-init ci-terraform-apply
 ci-deploy-and-test: validate-terraform deploy ci-track-experiment
 
 .PHONY: ci-config
-ci-config: set_app_engine set-various
+ci-config: set_app_engine set-various ci-pre-requesites
 
 .PHONY: ci-terraform-init
 ci-terraform-init:
@@ -177,6 +177,10 @@ ci-variables: init-config
 	@chmod +x ./bin/set_ci_var.sh
 	@echo {} > cloudbuild/IaC/vars.json
 	@cd bin && ./set_ci_var.sh $$FOLDER_ID $$BILLING_ACCOUNT $$PROJECT_NUMBER $$PROJECT_LABELS $$PROJECT_OWNER
+
+.PHONY: ci-pre-requesites
+ci-pre-requesites:
+	@source vars && cd IaC/prerequesites && terraform init && terraform apply -auto-approve
 
 #################
 #   DEVTOOLS    #
