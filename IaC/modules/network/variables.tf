@@ -26,3 +26,8 @@ variable "network_name_local" {
   default     = "mlflow-network"
 }
 
+variable "project_id" {
+  description = "GCP project"
+  type        = string
+}
+
