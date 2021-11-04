@@ -164,8 +164,11 @@ ci-terraform-init:
 ci-terraform-apply:
 	@cd cloudbuild/IaC && source vars && terraform apply -auto-approve
 
+.PHONY: ci-destroy
+ci-destroy: destroy ci-terraform-destroy
+
 .PHONY: ci-terraform-destroy
-ci-terraform-destroy: destroy
+ci-terraform-destroy:
 	@cd cloudbuild/IaC && source vars && terraform destroy -auto-approve
 
 .PHONY: ci-track-experiment
