@@ -20,6 +20,7 @@ resource "random_id" "db_name_suffix" {
 }
 
 resource "google_sql_database_instance" "this_instance" {
+  project          = var.project_id
   name             = "${var.instance_prefix}-${random_id.db_name_suffix.hex}"
   database_version = var.database_version
   region           = var.region
@@ -39,12 +40,14 @@ resource "google_sql_database_instance" "this_instance" {
 }
 
 resource "google_sql_database" "this_database" {
+  project    = var.project_id
   name       = var.database_name
   instance   = google_sql_database_instance.this_instance.name
   depends_on = [google_sql_database_instance.this_instance]
 }
 
 resource "google_sql_user" "this_user" {
+  project    = var.project_id
   name       = var.username
   instance   = google_sql_database_instance.this_instance.name
   password   = var.password

@@ -45,6 +45,7 @@ module "services" {
 
 module "bucket_backend" {
   source             = "./../modules/mlflow/artifacts"
+  project_id         = var.project_id
   bucket_name        = var.backend_bucket
   bucket_location    = var.backend_bucket_location
   number_of_version  = var.backend_bucket_number_of_version

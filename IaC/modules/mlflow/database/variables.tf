@@ -61,3 +61,7 @@ variable "module_depends_on" {
 variable "network_self_link" {
   type = string
 }
+variable "project_id" {
+  description = "GCP project"
+  type        = string
+}

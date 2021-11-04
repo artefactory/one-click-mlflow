@@ -180,6 +180,7 @@ ci-variables: init-config
 
 .PHONY: ci-pre-requesites
 ci-pre-requesites:
+	@source vars && gcloud config set project $$TF_VAR_project_id
 	@source vars && cd IaC/prerequesites && terraform init && terraform apply -auto-approve
 
 #################

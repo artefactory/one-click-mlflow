@@ -22,6 +22,7 @@ resource "random_password" "password" {
 
 resource "google_secret_manager_secret" "secret" {
   provider = google-beta
+  project  = var.project_id
 
   secret_id = var.secret_id
 
@@ -32,6 +33,7 @@ resource "google_secret_manager_secret" "secret" {
 
 resource "google_secret_manager_secret_version" "secret-version" {
   provider = google-beta
+  project  = var.project_id
 
   secret = google_secret_manager_secret.secret.id
 

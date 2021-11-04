@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 resource "google_service_account" "log_pusher" {
+  project      = var.project_id
   account_id   = "mlflow-log-pusher"
   display_name = "mlflow log pusher"
 }
@@ -29,7 +30,8 @@ resource "google_iap_app_engine_service_iam_member" "log_pusher_iap" {
 }
 
 resource "google_storage_bucket_iam_member" "log_pusher_storage" {
-  bucket = var.artifacts_bucket
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.log_pusher.email}"
+  project = var.project_id
+  bucket  = var.artifacts_bucket
+  role    = "roles/storage.objectAdmin"
+  member  = "serviceAccount:${google_service_account.log_pusher.email}"
 }

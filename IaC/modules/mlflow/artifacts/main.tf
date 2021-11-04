@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 resource "google_storage_bucket" "this" {
+  project       = var.project_id
   name          = var.bucket_name
   location      = var.bucket_location
   storage_class = var.storage_class
