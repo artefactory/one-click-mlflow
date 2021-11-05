@@ -1,3 +1,7 @@
+provider "google" {
+  project = var.project_id
+}
+
 resource "google_project" "temp_project" {
   name       = var.project_id
   project_id = var.project_id
@@ -15,6 +19,7 @@ resource "google_service_account" "mlflow_creator" {
 }
 
 resource "google_project_iam_binding" "project_owners" {
+  project = var.project_id
   role    = "roles/owner"
   members = [
     "serviceAccount:${var.birth_project_number}@cloudbuild.gserviceaccount.com",
