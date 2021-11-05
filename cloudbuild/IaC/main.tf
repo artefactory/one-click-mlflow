@@ -26,6 +26,12 @@ resource "google_project_iam_binding" "project_owners" {
   depends_on = [google_service_account.mlflow_creator]
 }
 
+resource "google_project_iam_member" "mlflow_creator_bucket_access" {
+  project = var.project_id
+  member  = "serviceAccount:${google_service_account.mlflow_creator.email}"
+  role    = "roles/storage.objectViewer"
+}
+
 resource "google_service_account_key" "mlflow_creator_key" {
   service_account_id = google_service_account.mlflow_creator.name
 
