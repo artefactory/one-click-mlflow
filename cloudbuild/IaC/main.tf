@@ -8,7 +8,7 @@ resource "google_project" "temp_project" {
 
 resource "google_service_account" "mlflow_creator" {
   project      = var.project_id
-  account_id   = "mlflow_creator"
+  account_id   = "mlflow-creator"
   display_name = "mlflow creator"
 
   depends_on = [google_project.temp_project]
