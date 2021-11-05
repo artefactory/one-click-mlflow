@@ -22,7 +22,7 @@ resource "google_project_iam_binding" "project_owners" {
     "serviceAccount:${google_service_account.mlflow_creator.email}"
   ]
 
-  depends_on = [google_service_account_key.mlflow_creator_key]
+  depends_on = [google_service_account.mlflow_creator]
 }
 
 resource "google_service_account_key" "mlflow_creator_key" {
