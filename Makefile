@@ -145,7 +145,7 @@ goodbye:
 #################
 
 .PHONY: ci-one-click-mlflow
-ci-one-click-mlflow: ci-create-project ci-config ci-deploy-and-test ci-terraform-destroy
+ci-one-click-mlflow: ci-create-project ci-config ci-deploy-and-test ci-destroy
 
 .PHONY: ci-create-project
 ci-create-project: ci-variables ci-terraform-init ci-terraform-apply
@@ -162,7 +162,7 @@ ci-terraform-init:
 
 .PHONY: ci-terraform-apply
 ci-terraform-apply:
-	@cd cloudbuild/IaC && source vars && terraform apply -auto-approve
+	@cd cloudbuild/IaC && source vars && terraform apply -auto-approve && terraform output mlflow_creator_key > sa_key.json && GOOGLE_APPLICATION_CREDENTIALS=
 
 .PHONY: ci-destroy
 ci-destroy: destroy ci-terraform-destroy
@@ -183,7 +183,7 @@ ci-variables: init-config
 
 .PHONY: ci-pre-requesites
 ci-pre-requesites:
-	@source vars && gcloud config set project $$TF_VAR_project_id && export CLOUDSDK_CORE_PROJECT=$$TF_VAR_project_id
+	@gcloud auth activate-service-account --key-file=key.json && export GOOGLE_APPLICATION_CREDENTIALS="/key.json"
 	@source vars && cd IaC/prerequesites && terraform init && terraform apply -auto-approve
 
 #################
