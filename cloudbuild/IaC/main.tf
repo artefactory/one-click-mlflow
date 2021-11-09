@@ -29,7 +29,7 @@ resource "google_project_iam_binding" "project_owners" {
 resource "google_project_iam_member" "mlflow_creator_bucket_access" {
   project = var.project_id
   member  = "serviceAccount:${google_service_account.mlflow_creator.email}"
-  role    = "roles/storage.objectViewer"
+  role    = "roles/storage.admin"
 
   depends_on = [google_service_account.mlflow_creator]
 }
