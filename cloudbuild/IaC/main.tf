@@ -30,6 +30,16 @@ resource "google_project_iam_member" "mlflow_creator_bucket_access" {
   project = var.project_id
   member  = "serviceAccount:${google_service_account.mlflow_creator.email}"
   role    = "roles/storage.objectViewer"
+
+  depends_on = [google_service_account.mlflow_creator]
+}
+
+resource "google_project_iam_member" "mlflow_creator_service_usage_consumer" {
+  project = var.project_id
+  member  = "serviceAccount:${google_service_account.mlflow_creator.email}"
+  role    = "roles/serviceusage.serviceUsageConsumer"
+
+  depends_on = [google_service_account.mlflow_creator]
 }
 
 resource "google_service_account_key" "mlflow_creator_key" {
