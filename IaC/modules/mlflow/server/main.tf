@@ -172,7 +172,6 @@ resource "google_app_engine_flexible_app_version" "mlflow_app" {
 }
 
 resource "google_iap_brand" "project_brand" {
-  project           = var.project_id
   count             = var.create_brand == 1 ? 1 : 0
   support_email     = var.consent_screen_support_email
   application_title = "mlflow"
