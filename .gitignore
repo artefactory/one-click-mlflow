@@ -5,6 +5,7 @@
 *.tfvars
 IaC/*/*.hcl
 IaC/*.hcl
+IaC/modules/mlflow/server/default_app_files/app.zip
 
 #secrets
 secrets/

@@ -74,39 +74,65 @@ resource "google_project_iam_member" "gae_api" {
   member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
 }
 
-resource "google_app_engine_flexible_app_version" "default_app" {
+resource "google_storage_bucket" "default_app_bucket" {
+  # bucket to have a zip file for building default app engine
+  name = "${data.google_project.project.project_id}-default-app-deployment"
+  # force destroy even when there is an object inside
+  force_destroy = true
+  # lifecycle rule of deleting objects after 1 day to do not keep the build objects
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      age = 1
+    }
+  }
+}
+
+data "archive_file" "default_app_files" {
+  # to build an archive from files in ./default_app_files
+  type        = "zip"
+  output_path = "./modules/mlflow/server/default_app_files/app.zip"
+
+  source_dir = "./modules/mlflow/server/default_app_files/"
+  excludes    = [ "./modules/mlflow/server/default_app_files/app.zip" ]
+}
+
+resource "google_storage_bucket_object" "default_app_archive" {
+  name = "app.zip"
+  bucket = google_storage_bucket.default_app_bucket.name
+  source = "./modules/mlflow/server/default_app_files/app.zip"
+
+  depends_on = [
+    google_storage_bucket.default_app_bucket,
+    data.archive_file.default_app_files
+  ]
+}
+
+resource "google_app_engine_standard_app_version" "default_app" {
   count      = var.create_default_service ? 1 : 0
   service    = "default"
   version_id = "mlflow-default"
-  runtime    = "custom"
+  runtime    = "python39"
 
   deployment {
-    container {
-      image = "gcr.io/cloudrun/hello"
+    zip {
+      source_url = "https://storage.googleapis.com/${google_storage_bucket.default_app_bucket.name}/${google_storage_bucket_object.default_app_archive.name}"
     }
-  }
-
-  liveness_check {
-    path = "/"
-  }
-
-  readiness_check {
-    path = "/"
   }
 
   automatic_scaling {
-    cool_down_period    = "120s"
-    min_total_instances = 1
-    max_total_instances = 1
-    cpu_utilization {
-      target_utilization = 0.5
-    }
+    max_idle_instances = 1
   }
 
   delete_service_on_destroy = false
   noop_on_destroy           = true
 
-  depends_on = [google_app_engine_application.app]
+  depends_on = [
+    google_app_engine_application.app,
+    google_storage_bucket_object.default_app_archive
+  ]
 }
 
 resource "google_app_engine_flexible_app_version" "mlflow_app" {
@@ -158,7 +184,7 @@ resource "google_app_engine_flexible_app_version" "mlflow_app" {
     create = "20m"
   }
   depends_on = [
-    google_app_engine_flexible_app_version.default_app,
+    google_app_engine_standard_app_version.default_app,
     google_project_iam_member.gcs,
     google_project_iam_member.gae_gcs,
     google_project_iam_member.cloudsql,

@@ -1,0 +1,5 @@
+runtime: python39
+api_version: 1
+threadsafe: true
+
+entrypoint: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
