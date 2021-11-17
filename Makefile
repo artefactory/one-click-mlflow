@@ -42,6 +42,7 @@ init-terraform:
 
 .PHONY: apply-terraform
 apply-terraform:
+	@exit 1
 	@echo "Deploying infrastructure..."
 	@echo "This should take about 20 minutes, don't forget to stretch and hydrate ☕️"
 	@source vars && cd IaC && terraform apply $(AUTO_APPROVE) $(OUTPUT_SUPPRESSOR)

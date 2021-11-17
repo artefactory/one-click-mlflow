@@ -32,4 +32,4 @@ done
 ./save_var.sh TF_VAR_oauth_client_secret ""
 ./save_var.sh TF_VAR_network_name ""
 ./save_var.sh TF_VAR_web_app_users \'[""]\'
-./save_var.sh TF_VAR_consent_screen_support_email "$SUPPORT_EMAIL"
+./save_var.sh TF_VAR_consent_screen_support_email "$5"
