@@ -155,6 +155,7 @@ ci-deploy-and-test: validate-terraform deploy ci-track-experiment
 
 .PHONY: ci-config
 ci-config: set_app_engine set-various ci-pre-requesites
+	@cat vars
 
 .PHONY: ci-terraform-init
 ci-terraform-init:
