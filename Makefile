@@ -183,7 +183,6 @@ ci-variables: init-config
 
 .PHONY: ci-pre-requesites
 ci-pre-requesites:
-	@#gcloud auth activate-service-account --key-file=key.json && export GOOGLE_APPLICATION_CREDENTIALS="/key.json"
 	@source vars && cd IaC/prerequesites && terraform init && terraform apply -auto-approve
 
 #################
