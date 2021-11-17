@@ -23,3 +23,7 @@ variable "module_depends_on" {
   type    = any
   default = null
 }
+variable "project_id" {
+  description = "GCP project"
+  type        = string
+}

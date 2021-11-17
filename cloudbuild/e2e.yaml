@@ -1,0 +1,18 @@
+steps:
+- name: 'eu.gcr.io/${PROJECT_ID}/ocmlf-builderterraformgcloud:1.0.0'
+  id: End-To-End test
+  env:
+    - 'PROJECT_NUMBER=$PROJECT_NUMBER'
+    - 'BILLING_ACCOUNT=${_BILLING_ACCOUNT}'
+    - 'FOLDER_ID=${_FOLDER_ID}'
+    - 'PROJECT_LABELS=${_PROJECT_LABELS}'
+    - 'PROJECT_OWNER=${_PROJECT_OWNER}'
+  entrypoint: 'bash'
+  args:
+    - -c
+    - |
+        if ! make ci-one-click-mlflow ; then
+          make ci-terraform-destroy
+          exit 1
+        fi
+timeout: 2400s

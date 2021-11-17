@@ -27,10 +27,12 @@ locals {
   }, var.env_variables)
 }
 
-data "google_project" "project" {
+provider "google" {
+  project = var.project_id
 }
 
 resource "google_app_engine_application" "app" {
+  project     = var.project_id
   location_id = var.location
   iap {
     enabled              = true
@@ -41,41 +43,42 @@ resource "google_app_engine_application" "app" {
 
 resource "google_project_iam_member" "cloudsql" {
   depends_on = [google_app_engine_application.app]
-  project    = data.google_project.project.project_id
+  project    = var.project_id
   role       = "roles/cloudsql.client"
-  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
+  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", var.project_id)
 }
 
 resource "google_project_iam_member" "secret" {
   depends_on = [google_app_engine_application.app]
-  project    = data.google_project.project.project_id
+  project    = var.project_id
   role       = "roles/secretmanager.secretAccessor"
-  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
+  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", var.project_id)
 }
 
 resource "google_project_iam_member" "gcs" {
   depends_on = [google_app_engine_application.app]
-  project    = data.google_project.project.project_id
+  project    = var.project_id
   role       = "roles/storage.objectAdmin"
-  member     = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", data.google_project.project.number)
+  member     = format("serviceAccount:service-%s@gae-api-prod.google.com.iam.gserviceaccount.com", var.project_id)
 }
 
 resource "google_project_iam_member" "gae_gcs" {
   depends_on = [google_app_engine_application.app]
-  project    = data.google_project.project.project_id
+  project    = var.project_id
   role       = "roles/storage.objectViewer"
-  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
+  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", var.project_id)
 }
 
 resource "google_project_iam_member" "gae_api" {
   depends_on = [google_app_engine_application.app]
-  project    = data.google_project.project.project_id
+  project    = var.project_id
   role       = "roles/compute.networkUser"
-  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", data.google_project.project.project_id)
+  member     = format("serviceAccount:%s@appspot.gserviceaccount.com", var.project_id)
 }
 
 resource "google_app_engine_flexible_app_version" "default_app" {
   count      = var.create_default_service ? 1 : 0
+  project    = var.project_id
   service    = "default"
   version_id = "mlflow-default"
   runtime    = "custom"
@@ -111,6 +114,7 @@ resource "google_app_engine_flexible_app_version" "default_app" {
 
 resource "google_app_engine_flexible_app_version" "mlflow_app" {
   service    = var.mlflow_server
+  project    = var.project_id
   version_id = "v0"
   runtime    = "custom"
 
@@ -171,7 +175,7 @@ resource "google_iap_brand" "project_brand" {
   count             = var.create_brand == 1 ? 1 : 0
   support_email     = var.consent_screen_support_email
   application_title = "mlflow"
-  project           = data.google_project.project.number
+
 }
 
 resource "google_iap_client" "project_client" {
@@ -182,8 +186,8 @@ resource "google_iap_client" "project_client" {
 
 resource "google_iap_app_engine_service_iam_member" "member" {
   for_each = toset(var.web_app_users)
-  project  = data.google_project.project.project_id
-  app_id   = data.google_project.project.project_id
+  project  = var.project_id
+  app_id   = var.project_id
   service  = google_app_engine_flexible_app_version.mlflow_app.service
   role     = "roles/iap.httpsResourceAccessor"
   member   = each.key

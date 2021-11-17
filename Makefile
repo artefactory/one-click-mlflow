@@ -28,6 +28,10 @@ destroy: init-terraform destroy-terraform
 #   TERRAFORM   #
 #################
 
+.PHONY: validate-terraform
+validate-terraform:
+	@cd IaC & rm -rf .terraform & terraform init -backend=false & terraform validate
+
 .PHONY: init-terraform
 init-terraform:
 	@echo "Initializing Terraform..."
@@ -135,6 +139,52 @@ goodbye:
 	@source vars && echo "The web app is available at https://mlflow-dot-$${TF_VAR_project_id}.ew.r.appspot.com (You may have trouble connecting for a few minutes after the deployment, while IAP gets setup)"
 	@echo "To push your first experiment, take a look at the bottom of the readme for an example."
 
+
+#################
+#      CI       #
+#################
+
+.PHONY: ci-one-click-mlflow
+ci-one-click-mlflow: ci-create-project ci-config ci-deploy-and-test ci-destroy
+
+.PHONY: ci-create-project
+ci-create-project: ci-variables ci-terraform-init ci-terraform-apply
+
+.PHONY: ci-deploy-and-test
+ci-deploy-and-test: validate-terraform deploy ci-track-experiment
+
+.PHONY: ci-config
+ci-config: set_app_engine set-various ci-pre-requesites
+	@cat vars
+
+.PHONY: ci-terraform-init
+ci-terraform-init:
+	@cd cloudbuild/IaC && source vars && rm -rf .terraform && terraform init
+
+.PHONY: ci-terraform-apply
+ci-terraform-apply:
+	@cd cloudbuild/IaC && source vars && terraform apply -auto-approve && terraform output mlflow_creator_key > sa_key.json && GOOGLE_APPLICATION_CREDENTIALS=
+
+.PHONY: ci-destroy
+ci-destroy: destroy ci-terraform-destroy
+
+.PHONY: ci-terraform-destroy
+ci-terraform-destroy:
+	@cd cloudbuild/IaC && source vars && terraform destroy -auto-approve
+
+.PHONY: ci-track-experiment
+ci-track-experiment:
+	@source vars && cd ./examples/ && pip install -r requirements.txt && python track_experiment.py -auto-approve $$TF_VAR_project_id
+
+.PHONY: ci-variables
+ci-variables: init-config
+	@chmod +x ./bin/set_ci_var.sh
+	@echo {} > cloudbuild/IaC/vars.json
+	@cd bin && ./set_ci_var.sh $$FOLDER_ID $$BILLING_ACCOUNT $$PROJECT_NUMBER $$PROJECT_LABELS $$PROJECT_OWNER
+
+.PHONY: ci-pre-requesites
+ci-pre-requesites:
+	@source vars && cd IaC/prerequesites && terraform init && terraform apply -auto-approve
 
 #################
 #   DEVTOOLS    #

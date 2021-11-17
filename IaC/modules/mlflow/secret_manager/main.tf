@@ -16,6 +16,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+
+provider "google" {
+  project = var.project_id
+}
+
+provider "google-beta" {
+  project = var.project_id
+}
+
 resource "random_password" "password" {
   length = 16
   special = false
@@ -23,6 +32,7 @@ resource "random_password" "password" {
 
 resource "google_secret_manager_secret" "secret" {
   provider = google-beta
+  project  = var.project_id
 
   secret_id = var.secret_id
 

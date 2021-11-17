@@ -16,12 +16,14 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 resource "google_compute_network" "private_network" {
+  project                 = var.project_id
   count                   = length(var.network_name) > 0 ? 0 : 1
   name                    = var.network_name_local
   auto_create_subnetworks = true
 }
 
 resource "google_compute_firewall" "allow-internal" {
+  project = var.project_id
   count   = length(var.network_name) > 0 ? 0 : 1
   name    = "${var.network_name_local}-allow-internal"
   network = google_compute_network.private_network[0].name
@@ -44,6 +46,7 @@ resource "google_compute_firewall" "allow-internal" {
 }
 
 resource "google_compute_global_address" "private_ip_addresses" {
+  project       = var.project_id
   name          = "private-ip-addresses"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
@@ -58,6 +61,7 @@ resource "google_service_networking_connection" "peering_connection" {
 }
 
 data "google_compute_network" "default_network" {
+  project    = var.project_id
   name       = length(var.network_name) > 0 ? var.network_name : google_compute_network.private_network[0].name
   depends_on = [google_service_networking_connection.peering_connection]
 }

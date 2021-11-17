@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from subprocess import check_output
 
@@ -18,7 +19,7 @@ def get_token():
         token = _get_token()
     except google.auth.exceptions.DefaultCredentialsError:
         print("You do not seem to have an mlflow-log-pusher service account key locally.")
-        prompt = input("Get one ? (Y/n): ") or "y"
+        prompt = "Y" if auto_approve else input("Get one ? (Y/n): ") or "y"
         if prompt.lower() == "y":
             print("Fetching SA key...")
             fetch_sa_key()
@@ -53,8 +54,17 @@ def _get_client_id(service_uri):
     return query_string["client_id"][0]
 
 
-PROJECT_ID = input("Enter your project ID: ")
-EXPERIMENT_NAME = input("Enter the name of your MLFlow experiment: ")
+print(f"args: {sys.argv}")
+
+# Auto-approve option for CI
+if len(sys.argv) == 3 and sys.argv[1] == "-auto-approve":
+    auto_approve = True
+    PROJECT_ID = sys.argv[2]
+    EXPERIMENT_NAME = "test-ci"
+else:
+    auto_approve = False
+    PROJECT_ID = input("Enter your project ID: ")
+    EXPERIMENT_NAME = input("Enter the name of your MLFlow experiment: ")
 
 # If mlflow if not deployed on the default app engine service, change it with the url of your service <!-- omit in toc -->
 tracking_uri = f"https://mlflow-dot-{PROJECT_ID}.ew.r.appspot.com"

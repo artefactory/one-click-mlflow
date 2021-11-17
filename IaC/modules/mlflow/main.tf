@@ -20,17 +20,20 @@ module "artifacts" {
   source            = "./artifacts"
   bucket_name       = var.artifacts_bucket_name
   bucket_location   = var.artifacts_bucket_location
+  project_id        = var.project_id
   number_of_version = var.artifacts_number_of_version
   storage_class     = var.artifacts_storage_class
 }
 
 module "db_secret" {
   source       = "./secret_manager"
+  project_id   = var.project_id
   secret_id    = var.db_password_name
 }
 
 module "database" {
   source            = "./database"
+  project_id        = var.project_id
   instance_prefix   = var.db_instance_prefix
   database_version  = var.db_version
   region            = var.db_region
