@@ -112,6 +112,7 @@ set-project:
 docker:
 	@echo
 	@echo "Remotely building mlflow server docker image"
+	@echo "This should take about 5 minutes, don't forget to stretch and hydrate ☕️"
 	@source vars && gcloud builds submit --tag $${TF_VAR_mlflow_docker_image} ./tracking_server $(OUTPUT_SUPPRESSOR)
 	@echo "Done"
 	@echo
